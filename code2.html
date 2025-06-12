@@ -1512,6 +1512,13 @@
       }
     ];
 
+    function placeholderSvg(name, size) {
+      const fontSize = Math.round(size * 0.2);
+      const y = Math.round(size * 0.55);
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><rect width="${size}" height="${size}" fill="%23667eea"/><text x="${size/2}" y="${y}" text-anchor="middle" fill="white" font-size="${fontSize}">${name.charAt(0)}</text></svg>`;
+      return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+    }
+
     // Состояние приложения
     let filteredProducts = [...products];
     let cart = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -1584,7 +1591,7 @@
           
           <div class="product-top">
             <div class="logo-wrapper">
-              <img src="${product.image}" alt="${product.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"80\" height=\"80\" viewBox=\"0 0 80 80\"><rect width=\"80\" height=\"80\" fill=\"%23667eea\"/><text x=\"40\" y=\"45\" text-anchor=\"middle\" fill=\"white\" font-size=\"14\">${product.name.charAt(0)}</text></svg>'">
+              <img src="${product.image}" alt="${product.name}" onerror="this.src=placeholderSvg('${product.name}',80)">
             </div>
           </div>
           
@@ -1776,7 +1783,7 @@
       
       cartItems.innerHTML = cart.map(item => `
         <div class="cart-item">
-          <img src="${item.image}" alt="${item.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"50\" height=\"50\" viewBox=\"0 0 50 50\"><rect width=\"50\" height=\"50\" fill=\"%23667eea\"/><text x=\"25\" y=\"30\" text-anchor=\"middle\" fill=\"white\" font-size=\"12\">${item.name.charAt(0)}</text></svg>'">
+          <img src="${item.image}" alt="${item.name}" onerror="this.src=placeholderSvg('${item.name}',50)">
           <div class="cart-item-info">
             <div class="cart-item-name">${item.name}</div>
             <div class="cart-item-price">$${item.price}</div>
@@ -1844,7 +1851,7 @@
       
       favoritesList.innerHTML = favoriteProducts.map(product => `
         <div class="favorite-item">
-          <img src="${product.image}" alt="${product.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"60\" height=\"60\" viewBox=\"0 0 60 60\"><rect width=\"60\" height=\"60\" fill=\"%23667eea\"/><text x=\"30\" y=\"35\" text-anchor=\"middle\" fill=\"white\" font-size=\"12\">${product.name.charAt(0)}</text></svg>'">
+          <img src="${product.image}" alt="${product.name}" onerror="this.src=placeholderSvg('${product.name}',60)">
           <div class="favorite-item-info">
             <div class="favorite-item-name">${product.name}</div>
             <div class="favorite-item-price">$${product.price}</div>
@@ -1863,7 +1870,7 @@
       document.getElementById('productDetail').innerHTML = `
         <div class="product-detail">
           <div class="product-detail-image">
-            <img src="${product.image}" alt="${product.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"150\" height=\"150\" viewBox=\"0 0 150 150\"><rect width=\"150\" height=\"150\" fill=\"%23667eea\"/><text x=\"75\" y=\"85\" text-anchor=\"middle\" fill=\"white\" font-size=\"24\">${product.name.charAt(0)}</text></svg>'">
+            <img src="${product.image}" alt="${product.name}" onerror="this.src=placeholderSvg('${product.name}',150)">
           </div>
           <div class="product-detail-info">
             <h2>${product.name}</h2>
