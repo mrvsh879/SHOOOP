@@ -526,49 +526,50 @@
 
     .cart-sidebar {
       position: fixed;
-      right: -400px;
       top: 0;
+      right: -400px;
       width: 400px;
-      height: 100vh;
+      height: 100%;
       background: white;
-      box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
       transition: right 0.3s ease;
-      z-index: 1500;
-      padding: 2rem;
-      overflow-y: auto;
+      z-index: 3000;
+      display: flex;
+      flex-direction: column;
     }
 
     .cart-sidebar.open {
       right: 0;
     }
 
-    .cart-overlay {
-      position: fixed;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 1400;
-      display: none;
+    .cart-header {
+      padding: 1rem;
+      background: #667eea;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
-    .cart-overlay.show {
-      display: block;
+    .cart-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
     }
 
     .cart-item {
       display: flex;
       align-items: center;
       gap: 1rem;
-      padding: 1rem;
-      border-bottom: 1px solid #eee;
+      margin-bottom: 1rem;
     }
 
     .cart-item img {
-      width: 50px;
-      height: 50px;
-      border-radius: 8px;
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      border: 1px solid #eee;
+      border-radius: 10px;
     }
 
     .cart-item-info {
@@ -585,7 +586,7 @@
       font-weight: 600;
     }
 
-    .quantity-controls {
+    .cart-item-quantity {
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -593,39 +594,33 @@
     }
 
     .quantity-btn {
-      background: #f8f9fa;
-      border: 1px solid #ddd;
+      background: #f0f0f0;
+      border: none;
+      padding: 4px 8px;
       border-radius: 4px;
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       cursor: pointer;
-      transition: all 0.3s ease;
     }
 
-    .quantity-btn:hover {
-      background: #e9ecef;
-    }
-
-    .cart-total {
+    .cart-footer {
       padding: 1rem;
-      border-top: 2px solid #667eea;
-      margin-top: 1rem;
+      border-top: 1px solid #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .checkout-btn {
-      width: 100%;
       background: linear-gradient(135deg, #667eea, #764ba2);
       color: white;
       border: none;
-      padding: 1rem;
-      border-radius: 10px;
+      padding: 0.75rem 1.5rem;
+      border-radius: 25px;
       font-weight: 600;
       cursor: pointer;
-      margin-top: 1rem;
       transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.85rem;
     }
 
     .checkout-btn:hover {
@@ -633,46 +628,43 @@
       box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
     }
 
-    .product-detail {
+    .cart-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+    }
+
+    .cart-overlay.open {
+      display: block;
+    }
+
+    /* Платежная форма */
+    .payment-methods {
       display: flex;
-      gap: 2rem;
-      align-items: flex-start;
+      gap: 1rem;
+      margin-top: 1rem;
     }
 
-    .product-detail-image {
-      flex-shrink: 0;
+    .payment-method {
+      background: white;
+      border: 2px solid #e1e5e9;
+      border-radius: 10px;
+      padding: 1rem;
+      flex: 1;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
     }
 
-    .product-detail-image img {
-      width: 150px;
-      height: 150px;
-      object-fit: contain;
-      border-radius: 15px;
-    }
-
-    .product-detail-info h2 {
-      margin-bottom: 1rem;
-      color: #333;
-    }
-
-    .product-detail-price {
-      font-size: 2rem;
-      color: #667eea;
-      font-weight: 700;
-      margin: 1rem 0;
-    }
-
-    .product-description {
-      margin: 1rem 0;
-      line-height: 1.6;
-      color: #666;
-    }
-
-    .crypto-payment {
-      background: #f8f9fa;
-      border-radius: 15px;
-      padding: 2rem;
-      margin-top: 2rem;
+    .payment-method:hover,
+    .payment-method.selected {
+      border-color: #667eea;
+      background: #f8f9ff;
     }
 
     .crypto-options {
@@ -897,12 +889,12 @@
         </div>
         <div class="site-title">KYC Shop</div>
       </div>
-      
+
       <div class="search-container">
         <input type="text" class="search-input" placeholder="Поиск аккаунтов..." id="searchInput">
         <i class="fas fa-search search-icon"></i>
       </div>
-      
+
       <div class="header-icons">
         <div class="header-icon" title="Избранное" id="favoritesBtn">
           <i class="fas fa-heart"></i>
@@ -922,60 +914,41 @@
     <div class="filter-bar">
       <div class="filter-controls">
         <div class="filter-group">
-          <label for="categoryFilter">Категория:</label>
+          <label for="categoryFilter">Категория</label>
           <select id="categoryFilter" class="filter-select">
-            <option value="all">Все категории</option>
+            <option value="all">Все</option>
             <option value="crypto">Криптоплатформы</option>
             <option value="payment">Платежные системы</option>
             <option value="social">Социальные сети</option>
           </select>
         </div>
-        
+
         <div class="filter-group">
-          <label for="priceFilter">Цена:</label>
+          <label for="priceFilter">Цена</label>
           <select id="priceFilter" class="filter-select">
-            <option value="all">Любая цена</option>
-            <option value="0-30">$0 - $30</option>
-            <option value="30-50">$30 - $50</option>
-            <option value="50-100">$50 - $100</option>
-            <option value="100+">$100+</option>
+            <option value="all">Любая</option>
+            <option value="0-10">$0 - $10</option>
+            <option value="10-20">$10 - $20</option>
+            <option value="20-30">$20 - $30</option>
+            <option value="30+">$30+</option>
           </select>
         </div>
-        
+
         <div class="filter-group">
-          <label for="sortBy">Сортировка:</label>
+          <label for="sortBy">Сортировка</label>
           <select id="sortBy" class="sort-select">
-            <option value="name">По названию</option>
+            <option value="name">По имени</option>
             <option value="price-low">Цена: по возрастанию</option>
             <option value="price-high">Цена: по убыванию</option>
             <option value="rating">По рейтингу</option>
           </select>
         </div>
-        
-        <div class="stats">
-          <i class="fas fa-chart-bar"></i>
-          <span id="resultsCount">Показано: 0 из 0</span>
-        </div>
+
+        <div class="stats" id="resultsCount"></div>
       </div>
     </div>
 
-    <div id="productGrid" class="product-grid">
-      <div class="loading">
-        <div class="spinner"></div>
-        <p>Загрузка товаров...</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Корзина -->
-  <div class="cart-overlay" id="cartOverlay"></div>
-  <div class="cart-sidebar" id="cartSidebar">
-    <h2>Корзина</h2>
-    <div id="cartItems"></div>
-    <div class="cart-total">
-      <div>Итого: $<span id="cartTotal">0.00</span></div>
-      <button class="checkout-btn" onclick="openCheckout()">Оформить заказ</button>
-    </div>
+    <div id="productGrid" class="product-grid"></div>
   </div>
 
   <!-- Модальное окно товара -->
@@ -986,68 +959,33 @@
     </div>
   </div>
 
-  <!-- Модальное окно оплаты -->
-  <div id="checkoutModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal('checkoutModal')">&times;</span>
-      <h2>Оплата криптовалютой</h2>
-      <div class="crypto-payment">
-        <h3>Выберите криптовалюту:</h3>
-        <div class="crypto-options">
-          <div class="crypto-option" data-crypto="BTC">
-            <div>₿ Bitcoin</div>
-            <small>BTC</small>
-          </div>
-          <div class="crypto-option" data-crypto="ETH">
-            <div>Ξ Ethereum</div>
-            <small>ETH</small>
-          </div>
-          <div class="crypto-option" data-crypto="USDT">
-            <div>₮ Tether</div>
-            <small>USDT</small>
-          </div>
-          <div class="crypto-option" data-crypto="LTC">
-            <div>Ł Litecoin</div>
-            <small>LTC</small>
-          </div>
-        </div>
-        <div id="paymentDetails"style="display: none;">
-          <h4>Адрес для перевода:</h4>
-          <div class="payment-address" id="cryptoAddress"></div>
-          <p>Сумма к оплате: $<span id="totalAmount"></span></p>
-          <p><small>После перевода средств, товары будут отправлены на вашу электронную почту в течение 24 часов.</small></p>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- Модальное окно профиля -->
   <div id="profileModal" class="modal profile-modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal('profileModal')">&times;</span>
-      <div id="profileContent">
-        <div id="authForm">
-          <h2>Вход / Регистрация</h2>
-          <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" placeholder="your@email.com">
-          </div>
-          <div class="form-group">
-            <label for="password">Пароль:</label>
-            <input type="password" id="password" placeholder="Введите пароль">
-          </div>
-          <div class="auth-buttons">
-            <button class="auth-btn login-btn" onclick="login()">Войти</button>
-            <button class="auth-btn register-btn" onclick="register()">Регистрация</button>
-          </div>
+
+      <div id="authForm">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email">
         </div>
-        <div id="userProfile" style="display: none;">
-          <div class="user-info">
-            <div class="user-avatar" id="userAvatar">U</div>
-            <h3 id="userName">Пользователь</h3>
-            <p id="userEmail">user@example.com</p>
-            <button class="auth-btn" onclick="logout()" style="background: #ff4757; color: white; margin-top: 1rem;">Выйти</button>
-          </div>
+        <div class="form-group">
+          <label for="password">Пароль</label>
+          <input type="password" id="password">
+        </div>
+        <div class="auth-buttons">
+          <button class="auth-btn login-btn" onclick="login()">Войти</button>
+          <button class="auth-btn register-btn" onclick="register()">Регистрация</button>
+        </div>
+      </div>
+
+      <div id="userProfile" style="display:none;">
+        <div class="user-info">
+          <div id="userAvatar" class="user-avatar"></div>
+          <h3 id="userName"></h3>
+          <p id="userEmail"></p>
+          <p id="userJoinDate"></p>
+          <button class="product-button" onclick="logout()">Выйти</button>
         </div>
       </div>
     </div>
@@ -1057,13 +995,26 @@
   <div id="favoritesModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal('favoritesModal')">&times;</span>
-      <h2>Избранные товары</h2>
       <div id="favoritesList" class="favorites-grid"></div>
     </div>
   </div>
 
+  <!-- Корзина -->
+  <div id="cartOverlay" class="cart-overlay" onclick="closeCart()"></div>
+  <div id="cartSidebar" class="cart-sidebar">
+    <div class="cart-header">
+      <h3>Корзина</h3>
+      <span class="close" onclick="closeCart()">&times;</span>
+    </div>
+    <div id="cartItems" class="cart-items"></div>
+    <div class="cart-footer">
+      <div id="cartTotal">Итого: $0</div>
+      <button class="checkout-btn">Оформить</button>
+    </div>
+  </div>
+
   <script>
-    // Данные товаров
+    // Список товаров
     const products = [
       // Криптоплатформы
       {
@@ -1072,7 +1023,7 @@
         category: "crypto",
         price: 45,
         rating: 4.9,
-        image: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@1/32/color/bnb.png",
+        image: "assets/icons/bnb.png",
         features: ["KYC Level 2", "Полная верификация", "API доступ"],
         availability: "in-stock",
         description: "Профессиональный аккаунт Binance с полной верификацией KYC Level 2. Включает все торговые функции, высокие лимиты и API доступ."
@@ -1083,7 +1034,7 @@
         category: "crypto",
         price: 52,
         rating: 4.8,
-        image: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@1/32/color/btc.png",
+        image: "assets/icons/btc.png",
         features: ["Полная верификация", "Coinbase Pro", "Высокие лимиты"],
         availability: "in-stock",
         description: "Премиум аккаунт Coinbase с доступом к Coinbase Pro и высокими лимитами на покупку/продажу криптовалют."
@@ -1094,7 +1045,7 @@
         category: "crypto",
         price: 38,
         rating: 4.7,
-        image: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@1/32/color/eth.png",
+        image: "assets/icons/eth.png",
         features: ["Tier 3 верификация", "Фьючерсы", "Маржинальная торговля"],
         availability: "limited",
         description: "Продвинутый аккаунт Kraken с Tier 3 верификацией, доступом к фьючерсам и маржинальной торговле."
@@ -1105,7 +1056,7 @@
         category: "crypto",
         price: 35,
         rating: 4.6,
-        image: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@1/32/color/kcs.png",
+        image: "assets/icons/kcs.png",
         features: ["VIP уровень", "Сниженные комиссии", "Приоритетная поддержка"],
         availability: "in-stock",
         description: "VIP аккаунт KuCoin со сниженными торговыми комиссиями и приоритетной технической поддержкой."
@@ -1116,7 +1067,7 @@
         category: "crypto",
         price: 42,
         rating: 4.5,
-        image: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@1/32/color/usdt.png",
+        image: "assets/icons/usdt.png",
         features: ["Профессиональная торговля", "Деривативы", "Копи-трейдинг"],
         availability: "in-stock",
         description: "Профессиональный аккаунт Bybit для торговли деривативами и участия в копи-трейдинге."
@@ -1127,7 +1078,7 @@
         category: "crypto",
         price: 29,
         rating: 4.4,
-        image: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@1/32/color/gt.png",
+        image: "assets/icons/gt.png",
         features: ["Elite статус", "Startup участие", "NFT торговля"],
         availability: "in-stock",
         description: "Elite аккаунт Gate.io с доступом к эксклюзивным startup проектам и NFT торговле."
@@ -1138,7 +1089,7 @@
         category: "crypto",
         price: 48,
         rating: 4.7,
-        image: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@1/32/color/okb.png",
+        image: "assets/icons/okb.png",
         features: ["Premium функции", "DeFi доступ", "Опционы"],
         availability: "limited",
         description: "Premium аккаунт OKX с доступом к DeFi продуктам и торговле опционами."
@@ -1149,7 +1100,7 @@
         category: "crypto",
         price: 33,
         rating: 4.3,
-        image: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@1/32/color/ht.png",
+        image: "assets/icons/ht.png",
         features: ["Global доступ", "Prime List", "P2P торговля"],
         availability: "in-stock",
         description: "Professional аккаунт Huobi Global с доступом к Prime List и P2P торговле."
@@ -1160,7 +1111,7 @@
         category: "crypto",
         price: 55,
         rating: 4.5,
-        image: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@1/32/color/leo.png",
+        image: "assets/icons/leo.png",
         features: ["Продвинутые ордера", "Lending", "Paper Trading"],
         availability: "limited",
         description: "Продвинутый аккаунт Bitfinex с возможностями кредитования и paper trading."
@@ -1171,7 +1122,7 @@
         category: "crypto",
         price: 59,
         rating: 4.6,
-        image: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@1/32/color/cro.png",
+        image: "assets/icons/cro.png",
         features: ["Premium карта", "Stake rewards", "NFT доступ"],
         availability: "in-stock",
         description: "Premium аккаунт Crypto.com с доступом к премиум карте и стейкинг наградам."
@@ -1182,7 +1133,7 @@
         category: "crypto",
         price: 65,
         rating: 4.8,
-        image: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@1/32/color/ftt.png",
+        image: "assets/icons/ftt.png",
         features: ["Pro торговля", "Tokenized stocks", "Move contracts"],
         availability: "out-of-stock",
         description: "Профессиональный аккаунт FTX с доступом к токенизированным акциям."
@@ -1193,7 +1144,7 @@
         category: "crypto",
         price: 47,
         rating: 4.4,
-        image: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@1/32/color/gusd.png",
+        image: "assets/icons/gusd.png",
         features: ["ActiveTrader", "Earn program", "Credit card"],
         availability: "in-stock",
         description: "Premium аккаунт Gemini с ActiveTrader интерфейсом и программой Earn."
@@ -1204,7 +1155,7 @@
         category: "crypto",
         price: 31,
         rating: 4.2,
-        image: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@1/32/color/btc.png",
+        image: "assets/icons/btc.png",
         features: ["Global доступ", "Enhanced verification", "OTC торговля"],
         availability: "in-stock",
         description: "Global аккаунт Bittrex с расширенной верификацией и OTC торговлей."
@@ -1217,7 +1168,7 @@
         category: "payment",
         price: 25,
         rating: 4.7,
-        image: "https://cdn.worldvectorlogo.com/logos/paypal-2.svg",
+        image: "assets/icons/paypal-2.svg",
         features: ["Business аккаунт", "Международные переводы", "API интеграция"],
         availability: "in-stock",
         description: "Верифицированный Business аккаунт PayPal с возможностью международных переводов."
@@ -1228,7 +1179,7 @@
         category: "payment",
         price: 35,
         rating: 4.8,
-        image: "https://cdn.worldvectorlogo.com/logos/stripe-4.svg",
+        image: "assets/icons/stripe-4.svg",
         features: ["Полная верификация", "Atlas поддержка", "Connect платформа"],
         availability: "limited",
         description: "Профессиональный аккаунт Stripe с полной верификацией и поддержкой Atlas."
@@ -1239,7 +1190,7 @@
         category: "payment",
         price: 28,
         rating: 4.6,
-        image: "https://cdn.worldvectorlogo.com/logos/wise-2.svg",
+        image: "assets/icons/wise-2.svg",
         features: ["Мультивалютный счет", "Международные переводы", "API доступ"],
         availability: "in-stock",
         description: "Business аккаунт Wise (TransferWise) с мультивалютным счетом."
@@ -1250,7 +1201,7 @@
         category: "payment",
         price: 32,
         rating: 4.5,
-        image: "https://cdn.worldvectorlogo.com/logos/revolut-2.svg",
+        image: "assets/icons/revolut-2.svg",
         features: ["Business функции", "Crypto торговля", "Expense management"],
         availability: "in-stock",
         description: "Business аккаунт Revolut с возможностями торговли криптовалютами."
@@ -1261,7 +1212,7 @@
         category: "payment",
         price: 22,
         rating: 4.3,
-        image: "https://cdn.worldvectorlogo.com/logos/skrill-1.svg",
+        image: "assets/icons/skrill-1.svg",
         features: ["VIP статус", "Криптовалюты", "Сниженные комиссии"],
         availability: "in-stock",
         description: "VIP аккаунт Skrill со сниженными комиссиями и поддержкой криптовалют."
@@ -1272,7 +1223,7 @@
         category: "payment",
         price: 24,
         rating: 4.2,
-        image: "https://cdn.worldvectorlogo.com/logos/neteller-1.svg",
+        image: "assets/icons/neteller-1.svg",
         features: ["Premium уровень", "Net+ карта", "Crypto exchange"],
         availability: "in-stock",
         description: "Premium аккаунт Neteller с Net+ картой и криптовалютной биржей."
@@ -1283,7 +1234,7 @@
         category: "payment",
         price: 27,
         rating: 4.4,
-        image: "https://cdn.worldvectorlogo.com/logos/payoneer-2.svg",
+        image: "assets/icons/payoneer-2.svg",
         features: ["Professional аккаунт", "Global payment", "Tax solutions"],
         availability: "limited",
         description: "Professional аккаунт Payoneer с глобальными платежными решениями."
@@ -1294,7 +1245,7 @@
         category: "payment",
         price: 18,
         rating: 4.1,
-        image: "https://cdn.worldvectorlogo.com/logos/bitcoin-btc-logo.svg",
+        image: "assets/icons/bitcoin-btc-logo.svg",
         features: ["Verified статус", "Все валюты", "API доступ"],
         availability: "in-stock",
         description: "Верифицированный аккаунт Perfect Money со всеми доступными валютами."
@@ -1305,7 +1256,7 @@
         category: "payment",
         price: 21,
         rating: 4.0,
-        image: "https://cdn.worldvectorlogo.com/logos/w-6.svg",
+        image: "assets/icons/w-6.svg",
         features: ["Professional статус", "Все кошельки", "Keeper Mobile"],
         availability: "in-stock",
         description: "Professional аккаунт WebMoney со всеми типами кошельков."
@@ -1316,7 +1267,7 @@
         category: "payment",
         price: 19,
         rating: 3.9,
-        image: "https://cdn.worldvectorlogo.com/logos/bitcoin-btc-logo.svg",
+        image: "assets/icons/bitcoin-btc-logo.svg",
         features: ["Premium функции", "Crypto поддержка", "Пластиковые карты"],
         availability: "in-stock",
         description: "Premium аккаунт AdvCash с поддержкой криптовалют и пластиковыми картами."
@@ -1327,7 +1278,7 @@
         category: "payment",
         price: 16,
         rating: 3.8,
-        image: "https://cdn.worldvectorlogo.com/logos/p-6.svg",
+        image: "assets/icons/p-6.svg",
         features: ["Verified аккаунт", "Prepaid карта", "Wire transfers"],
         availability: "in-stock",
         description: "Верифицированный аккаунт Paxum с предоплаченной картой."
@@ -1338,7 +1289,7 @@
         category: "payment",
         price: 23,
         rating: 3.7,
-        image: "https://cdn.worldvectorlogo.com/logos/bitcoin-btc-logo.svg",
+        image: "assets/icons/bitcoin-btc-logo.svg",
         features: ["Professional уровень", "Business tools", "Multi-currency"],
         availability: "out-of-stock",
         description: "Professional аккаунт Payza с бизнес инструментами."
@@ -1351,7 +1302,7 @@
         category: "social",
         price: 15,
         rating: 4.5,
-        image: "https://cdn.worldvectorlogo.com/logos/facebook-3.svg",
+        image: "assets/icons/facebook-3.svg",
         features: ["Business Manager", "Ads Manager", "Pixel доступ"],
         availability: "in-stock",
         description: "Аккаунт Facebook с настроенным Business Manager и доступом к рекламным инструментам."
@@ -1362,7 +1313,7 @@
         category: "social",
         price: 12,
         rating: 4.4,
-        image: "https://cdn.worldvectorlogo.com/logos/instagram-2016-5.svg",
+        image: "assets/icons/instagram-2016-5.svg",
         features: ["Business профиль", "Instagram Shopping", "Creator Studio"],
         availability: "in-stock",
         description: "Business аккаунт Instagram с включенным Shopping и доступом к Creator Studio."
@@ -1373,7 +1324,7 @@
         category: "social",
         price: 18,
         rating: 4.3,
-        image: "https://cdn.worldvectorlogo.com/logos/twitter-6.svg",
+        image: "assets/icons/twitter-6.svg",
         features: ["Twitter Blue", "Verified badge", "Advanced features"],
         availability: "limited",
         description: "Верифицированный аккаунт Twitter с подпиской Twitter Blue."
@@ -1384,7 +1335,7 @@
         category: "social",
         price: 22,
         rating: 4.6,
-        image: "https://cdn.worldvectorlogo.com/logos/linkedin-icon-2.svg",
+        image: "assets/icons/linkedin-icon-2.svg",
         features: ["Premium подписка", "InMail credits", "Advanced search"],
         availability: "in-stock",
         description: "Premium аккаунт LinkedIn с InMail кредитами и расширенным поиском."
@@ -1395,7 +1346,7 @@
         category: "social",
         price: 35,
         rating: 4.7,
-        image: "https://cdn.worldvectorlogo.com/logos/youtube-icon.svg",
+        image: "assets/icons/youtube-icon.svg",
         features: ["Monetization", "Partner Program", "Custom thumbnails"],
         availability: "limited",
         description: "YouTube канал с подключенной монетизацией и участием в Partner Program."
@@ -1406,7 +1357,7 @@
         category: "social",
         price: 14,
         rating: 4.2,
-        image: "https://cdn.worldvectorlogo.com/logos/tiktok-icon-2.svg",
+        image: "assets/icons/tiktok-icon-2.svg",
         features: ["Pro аккаунт", "Analytics", "Business tools"],
         availability: "in-stock",
         description: "Pro аккаунт TikTok с аналитикой и бизнес инструментами."
@@ -1417,7 +1368,7 @@
         category: "social",
         price: 8,
         rating: 4.1,
-        image: "https://cdn.worldvectorlogo.com/logos/telegram.svg",
+        image: "assets/icons/telegram.svg",
         features: ["Premium подписка", "Advanced features", "File limits"],
         availability: "in-stock",
         description: "Telegram аккаунт с Premium подпиской и расширенными возможностями."
@@ -1428,7 +1379,7 @@
         category: "social",
         price: 10,
         rating: 4.0,
-        image: "https://cdn.worldvectorlogo.com/logos/discord-6.svg",
+        image: "assets/icons/discord-6.svg",
         features: ["Nitro подписка", "Server boosts", "HD streaming"],
         availability: "in-stock",
         description: "Discord аккаунт с Nitro подпиской и server boosts."
@@ -1439,7 +1390,7 @@
         category: "social",
         price: 6,
         rating: 3.9,
-        image: "https://cdn.worldvectorlogo.com/logos/reddit-4.svg",
+        image: "assets/icons/reddit-4.svg",
         features: ["Premium подписка", "Ad-free", "Monthly coins"],
         availability: "in-stock",
         description: "Reddit аккаунт с Premium подпиской без рекламы."
@@ -1450,7 +1401,7 @@
         category: "social",
         price: 11,
         rating: 4.1,
-        image: "https://cdn.worldvectorlogo.com/logos/pinterest-badge.svg",
+        image: "assets/icons/pinterest-badge.svg",
         features: ["Business аккаунт", "Pinterest Ads", "Analytics"],
         availability: "in-stock",
         description: "Business аккаунт Pinterest с доступом к рекламе и аналитике."
@@ -1461,7 +1412,7 @@
         category: "social",
         price: 13,
         rating: 3.8,
-        image: "https://cdn.worldvectorlogo.com/logos/snapchat-2.svg",
+        image: "assets/icons/snapchat-2.svg",
         features: ["Business профиль", "Snap Ads", "Lens Studio"],
         availability: "in-stock",
         description: "Business аккаунт Snapchat с доступом к рекламным инструментам."
@@ -1472,7 +1423,7 @@
         category: "social",
         price: 25,
         rating: 4.3,
-        image: "https://cdn.worldvectorlogo.com/logos/whatsapp-4.svg",
+        image: "assets/icons/whatsapp-4.svg",
         features: ["Business API", "Automation", "Multiple agents"],
         availability: "limited",
         description: "WhatsApp Business аккаунт с API доступом для автоматизации."
@@ -1483,7 +1434,7 @@
         category: "social",
         price: 45,
         rating: 4.5,
-        image: "https://cdn.worldvectorlogo.com/logos/twitch-1.svg",
+        image: "assets/icons/twitch-1.svg",
         features: ["Partner Program", "Monetization", "Custom emotes"],
         availability: "out-of-stock",
         description: "Twitch канал с Partner статусом и возможностями монетизации."
@@ -1494,7 +1445,7 @@
         category: "social",
         price: 28,
         rating: 4.0,
-        image: "https://cdn.worldvectorlogo.com/logos/onlyfans-1.svg",
+        image: "assets/icons/onlyfans-1.svg",
         features: ["Creator аккаунт", "Monetization", "Analytics"],
         availability: "limited",
         description: "Creator аккаунт OnlyFans с настроенной монетизацией."
@@ -1505,7 +1456,7 @@
         category: "social",
         price: 20,
         rating: 3.6,
-        image: "https://cdn.worldvectorlogo.com/logos/clubhouse-2.svg",
+        image: "assets/icons/clubhouse-2.svg",
         features: ["Creator функции", "Room hosting", "Follower base"],
         availability: "in-stock",
         description: "Clubhouse аккаунт с Creator функциями и базой подписчиков."
@@ -1529,12 +1480,12 @@
     function setupEventListeners() {
       // Поиск
       document.getElementById('searchInput').addEventListener('input', filterProducts);
-      
+
       // Фильтры
       document.getElementById('categoryFilter').addEventListener('change', filterProducts);
       document.getElementById('priceFilter').addEventListener('change', filterProducts);
       document.getElementById('sortBy').addEventListener('change', filterProducts);
-      
+
       // Кнопки в хедере
       document.getElementById('cartBtn').addEventListener('click', toggleCart);
       document.getElementById('profileBtn').addEventListener('click', () => openModal('profileModal'));
@@ -1542,10 +1493,10 @@
         renderFavorites();
         openModal('favoritesModal');
       });
-      
+
       // Закрытие корзины
       document.getElementById('cartOverlay').addEventListener('click', closeCart);
-      
+
       // Криптовалютные опции
       document.querySelectorAll('.crypto-option').forEach(option => {
         option.addEventListener('click', function() {
@@ -1558,7 +1509,7 @@
 
     function renderProducts() {
       const grid = document.getElementById('productGrid');
-      
+
       if (filteredProducts.length === 0) {
         grid.innerHTML = `
           <div class="no-results">
@@ -1573,35 +1524,35 @@
 
       grid.innerHTML = filteredProducts.map(product => `
         <div class="product-card" onclick="openProductDetail(${product.id})">
-          <button class="favorite-btn ${favorites.includes(product.id) ? 'active' : ''}" 
+          <button class="favorite-btn ${favorites.includes(product.id) ? 'active' : ''}"
                   onclick="event.stopPropagation(); toggleFavorite(${product.id})">
             <i class="fas fa-heart"></i>
           </button>
-          
+
           <div class="availability ${product.availability}">
             ${getAvailabilityText(product.availability)}
           </div>
-          
+
           <div class="product-top">
             <div class="logo-wrapper">
               <img src="${product.image}" alt="${product.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"80\" height=\"80\" viewBox=\"0 0 80 80\"><rect width=\"80\" height=\"80\" fill=\"%23667eea\"/><text x=\"40\" y=\"45\" text-anchor=\"middle\" fill=\"white\" font-size=\"14\">${product.name.charAt(0)}</text></svg>'">
             </div>
           </div>
-          
+
           <div class="product-info">
             <div class="product-rating">
               ${generateStars(product.rating)}
               <span class="rating-text">${product.rating}</span>
             </div>
-            
+
             <h3 class="product-title">${product.name}</h3>
             <div class="product-category">${getCategoryName(product.category)}</div>
-            
+
             <div class="product-features">
               ${product.features.map(feature => `<span class="feature-badge">${feature}</span>`).join('')}
             </div>
           </div>
-          
+
           <div class="product-bottom">
             <div class="product-price">$${product.price}</div>
             <button class="product-button" onclick="event.stopPropagation(); addToCart(${product.id})">
@@ -1610,7 +1561,7 @@
           </div>
         </div>
       `).join('');
-      
+
       updateResultsCount();
     }
 
@@ -1622,10 +1573,10 @@
 
       filteredProducts = products.filter(product => {
         const matchesSearch = product.name.toLowerCase().includes(searchTerm) ||
-                            product.features.some(feature => feature.toLowerCase().includes(searchTerm));
-        
+                              product.features.some(feature => feature.toLowerCase().includes(searchTerm));
+
         const matchesCategory = categoryFilter === 'all' || product.category === categoryFilter;
-        
+
         let matchesPrice = true;
         if (priceFilter !== 'all') {
           const [min, max] = priceFilter.split('-').map(p => p.replace('+', ''));
@@ -1636,7 +1587,7 @@
             matchesPrice = price >= parseInt(min);
           }
         }
-        
+
         return matchesSearch && matchesCategory && matchesPrice;
       });
 
@@ -1662,20 +1613,20 @@
       const stars = [];
       const fullStars = Math.floor(rating);
       const hasHalfStar = rating % 1 !== 0;
-      
+
       for (let i = 0; i < fullStars; i++) {
         stars.push('<i class="fas fa-star star"></i>');
       }
-      
+
       if (hasHalfStar) {
         stars.push('<i class="fas fa-star-half-alt star"></i>');
       }
-      
+
       const emptyStars = 5 - Math.ceil(rating);
       for (let i = 0; i < emptyStars; i++) {
         stars.push('<i class="far fa-star star"></i>');
       }
-      
+
       return stars.join('');
     }
 
@@ -1698,160 +1649,113 @@
     }
 
     function updateResultsCount() {
-      document.getElementById('resultsCount').textContent = 
+      document.getElementById('resultsCount').textContent =
         `Показано: ${filteredProducts.length} из ${products.length}`;
     }
 
     function addToCart(productId) {
       const product = products.find(p => p.id === productId);
       const existingItem = cart.find(item => item.id === productId);
-      
+
       if (existingItem) {
         existingItem.quantity += 1;
       } else {
         cart.push({ ...product, quantity: 1 });
       }
-      
       localStorage.setItem('cart', JSON.stringify(cart));
       updateCartBadge();
-      renderCart();
-      
-      // Показываем уведомление
-      showNotification(`${product.name} добавлен в корзину!`);
+      showNotification('Товар добавлен в корзину!');
+    }
+
+    function toggleCart() {
+      document.getElementById('cartSidebar').classList.toggle('open');
+      document.getElementById('cartOverlay').classList.toggle('open');
+      renderCartItems();
+    }
+
+    function closeCart() {
+      document.getElementById('cartSidebar').classList.remove('open');
+      document.getElementById('cartOverlay').classList.remove('open');
+    }
+
+    function updateCartBadge() {
+      document.getElementById('cartBadge').textContent = cart.reduce((total, item) => total + item.quantity, 0);
+    }
+
+    function renderCartItems() {
+      const cartItemsContainer = document.getElementById('cartItems');
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p class="no-results">Корзина пуста</p>';
+        document.getElementById('cartTotal').textContent = 'Итого: $0';
+        return;
+      }
+
+      cartItemsContainer.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <img src="${item.image}" alt="${item.name}">
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-price">$${item.price}</div>
+            <div class="cart-item-quantity">
+              <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+              <span>${item.quantity}</span>
+              <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+            </div>
+          </div>
+          <button class="remove-favorite" onclick="removeFromCart(${item.id})">&times;</button>
+        </div>
+      `).join('');
+
+      const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      document.getElementById('cartTotal').textContent = `Итого: $${total}`;
+    }
+
+    function updateQuantity(productId, delta) {
+      const item = cart.find(i => i.id === productId);
+      if (!item) return;
+
+      item.quantity += delta;
+      if (item.quantity <= 0) {
+        cart = cart.filter(i => i.id !== productId);
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      renderCartItems();
+      updateCartBadge();
     }
 
     function removeFromCart(productId) {
       cart = cart.filter(item => item.id !== productId);
       localStorage.setItem('cart', JSON.stringify(cart));
+      renderCartItems();
       updateCartBadge();
-      renderCart();
-    }
-
-    function updateQuantity(productId, change) {
-      const item = cart.find(item => item.id === productId);
-      if (item) {
-        item.quantity += change;
-        if (item.quantity <= 0) {
-          removeFromCart(productId);
-        } else {
-          localStorage.setItem('cart', JSON.stringify(cart));
-          renderCart();
-          updateCartBadge();
-        }
-      }
-    }
-
-    function updateCartBadge() {
-      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-      document.getElementById('cartBadge').textContent = totalItems;
-    }
-
-    function toggleCart() {
-      const sidebar = document.getElementById('cartSidebar');
-      const overlay = document.getElementById('cartOverlay');
-      
-      if (sidebar.classList.contains('open')) {
-        closeCart();
-      } else {
-        renderCart();
-        sidebar.classList.add('open');
-        overlay.classList.add('show');
-      }
-    }
-
-    function closeCart() {
-      document.getElementById('cartSidebar').classList.remove('open');
-      document.getElementById('cartOverlay').classList.remove('show');
-    }
-
-    function renderCart() {
-      const cartItems = document.getElementById('cartItems');
-      const cartTotal = document.getElementById('cartTotal');
-      
-      if (cart.length === 0) {
-        cartItems.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">Корзина пуста</p>';
-        cartTotal.textContent = '0.00';
-        return;
-      }
-      
-      cartItems.innerHTML = cart.map(item => `
-        <div class="cart-item">
-          <img src="${item.image}" alt="${item.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"50\" height=\"50\" viewBox=\"0 0 50 50\"><rect width=\"50\" height=\"50\" fill=\"%23667eea\"/><text x=\"25\" y=\"30\" text-anchor=\"middle\" fill=\"white\" font-size=\"12\">${item.name.charAt(0)}</text></svg>'">
-          <div class="cart-item-info">
-            <div class="cart-item-name">${item.name}</div>
-            <div class="cart-item-price">$${item.price}</div>
-            <div class="quantity-controls">
-              <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
-              <span>${item.quantity}</span>
-              <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
-              <button class="quantity-btn" onclick="removeFromCart(${item.id})" style="margin-left: 1rem; background: #ff4757; color: white;">
-                <i class="fas fa-trash"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      `).join('');
-      
-      const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-      cartTotal.textContent = total.toFixed(2);
-    }
-
-    function openCheckout() {
-      if (cart.length === 0) {
-        showNotification('Корзина пуста!', 'error');
-        return;
-      }
-      
-      const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-      document.getElementById('totalAmount').textContent = total.toFixed(2);
-      
-      closeCart();
-      openModal('checkoutModal');
-    }
-
-    function showPaymentDetails(crypto) {
-      const addresses = {
-        BTC: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
-        ETH: '0x742d35Cc6634C0532925a3b8D40ba9d3527B6c2C',
-        USDT: 'TLa2f6VPqDgRE67v1736s7jjYTi6CpPo8k',
-        LTC: 'LhK2BTgxvvk5uBgGy5X1w9qz7w8h3bZZ7L'
-      };
-      
-      document.getElementById('cryptoAddress').textContent = addresses[crypto];
-      document.getElementById('paymentDetails').style.display = 'block';
     }
 
     function toggleFavorite(productId) {
-      const index = favorites.indexOf(productId);
-      if (index > -1) {
-        favorites.splice(index, 1);
+      if (favorites.includes(productId)) {
+        favorites = favorites.filter(id => id !== productId);
       } else {
         favorites.push(productId);
       }
-      
       localStorage.setItem('favorites', JSON.stringify(favorites));
-      renderProducts(); // Обновляем отображение
+      renderProducts();
     }
 
     function renderFavorites() {
-      const favoritesList = document.getElementById('favoritesList');
-      const favoriteProducts = products.filter(p => favorites.includes(p.id));
-      
-      if (favoriteProducts.length === 0) {
-        favoritesList.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">Нет избранных товаров</p>';
+      const favoritesContainer = document.getElementById('favoritesList');
+      if (favorites.length === 0) {
+        favoritesContainer.innerHTML = '<p class="no-results">Список избранного пуст</p>';
         return;
       }
-      
-      favoritesList.innerHTML = favoriteProducts.map(product => `
+
+      const favoriteProducts = products.filter(p => favorites.includes(p.id));
+      favoritesContainer.innerHTML = favoriteProducts.map(product => `
         <div class="favorite-item">
-          <img src="${product.image}" alt="${product.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"60\" height=\"60\" viewBox=\"0 0 60 60\"><rect width=\"60\" height=\"60\" fill=\"%23667eea\"/><text x=\"30\" y=\"35\" text-anchor=\"middle\" fill=\"white\" font-size=\"12\">${product.name.charAt(0)}</text></svg>'">
+          <img src="${product.image}" alt="${product.name}">
           <div class="favorite-item-info">
             <div class="favorite-item-name">${product.name}</div>
             <div class="favorite-item-price">$${product.price}</div>
           </div>
-          <button class="remove-favorite" onclick="toggleFavorite(${product.id}); renderFavorites();">
-            <i class="fas fa-times"></i>
-          </button>
+          <button class="remove-favorite" onclick="toggleFavorite(${product.id})">&times;</button>
         </div>
       `).join('');
     }
@@ -1859,37 +1763,33 @@
     function openProductDetail(productId) {
       const product = products.find(p => p.id === productId);
       if (!product) return;
-      
+
       document.getElementById('productDetail').innerHTML = `
         <div class="product-detail">
-          <div class="product-detail-image">
-            <img src="${product.image}" alt="${product.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"150\" height=\"150\" viewBox=\"0 0 150 150\"><rect width=\"150\" height=\"150\" fill=\"%23667eea\"/><text x=\"75\" y=\"85\" text-anchor=\"middle\" fill=\"white\" font-size=\"24\">${product.name.charAt(0)}</text></svg>'">
+          <div>
+            <img src="${product.image}" alt="${product.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;200&quot; height=&quot;200&quot; viewBox=&quot;0 0 80 80&quot;><rect width=&quot;80&quot; height=&quot;80&quot; fill=&quot;#667eea&quot;/><text x=&quot;40&quot; y=&quot;45&quot; text-anchor=&quot;middle&quot; fill=&quot;white&quot; font-size=&quot;14&quot;>${product.name.charAt(0)}</text></svg>'">
           </div>
-          <div class="product-detail-info">
-            <h2>${product.name}</h2>
-            <div class="product-rating">
-              ${generateStars(product.rating)}
-              <span class="rating-text">${product.rating}</span>
-            </div>
-            <div class="product-detail-price">$${product.price}</div>
+          <div>
+            <h3>${product.name}</h3>
             <div class="product-category">${getCategoryName(product.category)}</div>
             <div class="product-features">
               ${product.features.map(feature => `<span class="feature-badge">${feature}</span>`).join('')}
             </div>
-            <div class="product-description">
-              <p>${product.description}</p>
+            <p>${product.description}</p>
+            <div class="product-bottom">
+              <div class="product-price">$${product.price}</div>
+              <div class="availability ${product.availability}">
+                ${getAvailabilityText(product.availability)}
+              </div>
+              <button class="product-button" onclick="addToCart(${product.id}); closeModal('productModal');"
+                      ${product.availability === 'out-of-stock' ? 'disabled' : ''}>
+                ${product.availability === 'out-of-stock' ? 'Нет в наличии' : 'Добавить в корзину'}
+              </button>
             </div>
-            <div class="availability ${product.availability}">
-              ${getAvailabilityText(product.availability)}
-            </div>
-            <button class="product-button" onclick="addToCart(${product.id}); closeModal('productModal');" 
-                    ${product.availability === 'out-of-stock' ? 'disabled' : ''}>
-              ${product.availability === 'out-of-stock' ? 'Нет в наличии' : 'Добавить в корзину'}
-            </button>
           </div>
         </div>
       `;
-      
+
       openModal('productModal');
     }
 
@@ -1904,22 +1804,22 @@
     function login() {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      
+
       if (!email || !password) {
         showNotification('Заполните все поля!', 'error');
         return;
       }
-      
+
       // Простая имитация авторизации
       const user = {
         email: email,
         name: email.split('@')[0],
         joinDate: new Date().toLocaleDateString()
       };
-      
+
       currentUser = user;
       localStorage.setItem('currentUser', JSON.stringify(user));
-      
+
       showAuthenticatedUser();
       showNotification('Вход выполнен успешно!');
     }
@@ -1927,22 +1827,22 @@
     function register() {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      
+
       if (!email || !password) {
         showNotification('Заполните все поля!', 'error');
         return;
       }
-      
+
       // Простая имитация регистрации
       const user = {
         email: email,
         name: email.split('@')[0],
         joinDate: new Date().toLocaleDateString()
       };
-      
+
       currentUser = user;
       localStorage.setItem('currentUser', JSON.stringify(user));
-      
+
       showAuthenticatedUser();
       showNotification('Регистрация прошла успешно!');
     }
@@ -1970,7 +1870,7 @@
     function showAuthenticatedUser() {
       document.getElementById('authForm').style.display = 'none';
       document.getElementById('userProfile').style.display = 'block';
-      
+
       document.getElementById('userName').textContent = currentUser.name;
       document.getElementById('userEmail').textContent = currentUser.email;
       document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
@@ -1990,10 +1890,10 @@
         z-index: 10000;
         animation: slideIn 0.3s ease;
       `;
-      
+
       notification.textContent = message;
       document.body.appendChild(notification);
-      
+
       setTimeout(() => {
         notification.style.animation = 'slideOut 0.3s ease';
         setTimeout(() => document.body.removeChild(notification), 300);
@@ -2017,7 +1917,7 @@
         from { transform: translateX(100%); opacity: 0; }
         to { transform: translateX(0); opacity: 1; }
       }
-      
+
       @keyframes slideOut {
         from { transform: translateX(0); opacity: 1; }
         to { transform: translateX(100%); opacity: 0; }
