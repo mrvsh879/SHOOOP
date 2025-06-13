@@ -135,7 +135,7 @@
       transform: translateY(-2px);
     }
 
-    .cart-badge {
+    .badge {
       position: absolute;
       top: -5px;
       right: -5px;
@@ -147,7 +147,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
+      font-size: 0.75rem;
       font-weight: bold;
     }
 
@@ -227,12 +227,38 @@
       position: relative;
       border: 1px solid rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(10px);
-      cursor: pointer;
     }
 
     .product-card:hover {
       transform: translateY(-10px) scale(1.02);
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+
+    .favorite-btn {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+
+    .favorite-btn:hover {
+      background: white;
+      transform: scale(1.1);
+    }
+
+    .favorite-btn.active {
+      background: #ff4757;
+      color: white;
     }
 
     .product-card::before {
@@ -257,6 +283,7 @@
       text-align: center;
       position: relative;
       overflow: hidden;
+      cursor: pointer;
     }
 
     .product-top::before {
@@ -284,16 +311,25 @@
       position: relative;
       z-index: 2;
       transition: transform 0.3s ease;
+      width: 100px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .logo-wrapper:hover {
       transform: scale(1.05);
     }
 
-    .logo-wrapper img {
+    .logo-icon {
+      font-size: 48px;
       width: 80px;
       height: 80px;
-      object-fit: contain;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
     }
 
     .product-info {
@@ -387,37 +423,6 @@
       box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
     }
 
-    .favorite-btn {
-      position: absolute;
-      top: 1rem;
-      left: 1rem;
-      background: rgba(255, 255, 255, 0.9);
-      border: none;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      z-index: 10;
-    }
-
-    .favorite-btn:hover {
-      background: white;
-      transform: scale(1.1);
-    }
-
-    .favorite-btn i {
-      color: #ff4757;
-      font-size: 18px;
-    }
-
-    .favorite-btn.active i {
-      color: #ff4757;
-    }
-
     .availability {
       position: absolute;
       top: 1rem;
@@ -447,6 +452,207 @@
       background: rgba(231, 76, 60, 0.1);
       color: #e74c3c;
       border: 1px solid rgba(231, 76, 60, 0.3);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-content {
+      background: white;
+      margin: 5% auto;
+      padding: 0;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 800px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-body {
+      padding: 2rem;
+    }
+
+    .cart-sidebar {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 400px;
+      height: 100vh;
+      background: white;
+      box-shadow: -5px 0 25px rgba(0, 0, 0, 0.15);
+      transition: right 0.3s ease;
+      z-index: 1500;
+      overflow-y: auto;
+    }
+
+    .cart-sidebar.open {
+      right: 0;
+    }
+
+    .cart-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .cart-items {
+      padding: 1rem;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .cart-item-info {
+      flex: 1;
+    }
+
+    .cart-item-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .cart-item-price {
+      color: #667eea;
+      font-weight: 700;
+    }
+
+    .cart-total {
+      padding: 1rem;
+      border-top: 2px solid #eee;
+      background: #f8f9fa;
+    }
+
+    .checkout-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      font-size: 1.1rem;
+      margin-top: 1rem;
+    }
+
+    .profile-modal .modal-content {
+      max-width: 500px;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e1e5e9;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+    }
+
+    .payment-methods {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .payment-method {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+      border: 2px solid #e1e5e9;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .payment-method:hover, .payment-method.selected {
+      border-color: #667eea;
+      background: rgba(102, 126, 234, 0.05);
+    }
+
+    .payment-method i {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
     }
 
     .loading {
@@ -480,356 +686,6 @@
       font-size: 4rem;
       margin-bottom: 1rem;
       color: #ddd;
-    }
-
-    /* Модальные окна */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 2000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(5px);
-    }
-
-    .modal-content {
-      background: white;
-      margin: 5% auto;
-      padding: 2rem;
-      border-radius: 20px;
-      max-width: 600px;
-      position: relative;
-      animation: modalSlideIn 0.3s ease;
-    }
-
-    @keyframes modalSlideIn {
-      from { transform: translateY(-50px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    .close {
-      position: absolute;
-      right: 20px;
-      top: 20px;
-      font-size: 24px;
-      cursor: pointer;
-      color: #999;
-      transition: color 0.3s ease;
-    }
-
-    .close:hover {
-      color: #333;
-    }
-
-    .cart-sidebar {
-      position: fixed;
-      top: 0;
-      right: -400px;
-      width: 400px;
-      height: 100%;
-      background: white;
-      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-      transition: right 0.3s ease;
-      z-index: 3000;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .cart-sidebar.open {
-      right: 0;
-    }
-
-    .cart-header {
-      padding: 1rem;
-      background: #667eea;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .cart-items {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1rem;
-    }
-
-    .cart-item {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    .cart-item img {
-      width: 60px;
-      height: 60px;
-      object-fit: contain;
-      border: 1px solid #eee;
-      border-radius: 10px;
-    }
-
-    .cart-item-info {
-      flex: 1;
-    }
-
-    .cart-item-name {
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-    }
-
-    .cart-item-price {
-      color: #667eea;
-      font-weight: 600;
-    }
-
-    .cart-item-quantity {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
-    }
-
-    .quantity-btn {
-      background: #f0f0f0;
-      border: none;
-      padding: 4px 8px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    .cart-footer {
-      padding: 1rem;
-      border-top: 1px solid #f0f0f0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .checkout-btn {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 25px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      font-size: 0.85rem;
-    }
-
-    .checkout-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-    }
-
-    .cart-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 2000;
-    }
-
-    .cart-overlay.open {
-      display: block;
-    }
-
-    /* Платежная форма */
-    .payment-methods {
-      display: flex;
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-
-    .payment-method {
-      background: white;
-      border: 2px solid #e1e5e9;
-      border-radius: 10px;
-      padding: 1rem;
-      flex: 1;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .payment-method:hover,
-    .payment-method.selected {
-      border-color: #667eea;
-      background: #f8f9ff;
-    }
-
-    .crypto-options {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 1rem;
-      margin: 1rem 0;
-    }
-
-    .crypto-option {
-      background: white;
-      border: 2px solid #e1e5e9;
-      border-radius: 10px;
-      padding: 1rem;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .crypto-option:hover,
-    .crypto-option.selected {
-      border-color: #667eea;
-      background: #f8f9ff;
-    }
-
-    .payment-address {
-      background: #f8f9fa;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 1rem;
-      margin: 1rem 0;
-      font-family: monospace;
-      word-break: break-all;
-    }
-
-    /* Профиль и избранное */
-    .profile-modal .modal-content {
-      max-width: 500px;
-    }
-
-    .form-group {
-      margin-bottom: 1.5rem;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
-      color: #333;
-    }
-
-    .form-group input {
-      width: 100%;
-      padding: 0.75rem;
-      border: 2px solid #e1e5e9;
-      border-radius: 8px;
-      font-size: 16px;
-      transition: border-color 0.3s ease;
-    }
-
-    .form-group input:focus {
-      outline: none;
-      border-color: #667eea;
-    }
-
-    .auth-buttons {
-      display: flex;
-      gap: 1rem;
-      margin-top: 2rem;
-    }
-
-    .auth-btn {
-      flex: 1;
-      padding: 0.75rem;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .login-btn {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-    }
-
-    .register-btn {
-      background: #f8f9fa;
-      color: #333;
-      border: 2px solid #e1e5e9;
-    }
-
-    .auth-btn:hover {
-      transform: translateY(-2px);
-    }
-
-    .user-info {
-      text-align: center;
-      padding: 2rem;
-    }
-
-    .user-avatar {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      margin: 0 auto 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 2rem;
-    }
-
-    .favorites-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.5rem;
-      padding: 1rem 0;
-    }
-
-    .favorite-item {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      background: white;
-      border-radius: 10px;
-      padding: 1rem;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .favorite-item img {
-      width: 60px;
-      height: 60px;
-      border-radius: 8px;
-    }
-
-    .favorite-item-info {
-      flex: 1;
-    }
-
-    .favorite-item-name {
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-    }
-
-    .favorite-item-price {
-      color: #667eea;
-      font-weight: 600;
-    }
-
-    .remove-favorite {
-      background: #ff4757;
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .remove-favorite:hover {
-      background: #ff3838;
-      transform: scale(1.1);
     }
 
     @media (max-width: 768px) {
@@ -869,13 +725,9 @@
         right: -100%;
       }
 
-      .product-detail {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .crypto-options {
-        grid-template-columns: 1fr 1fr;
+      .modal-content {
+        width: 95%;
+        margin: 10% auto;
       }
     }
   </style>
@@ -898,13 +750,14 @@
       <div class="header-icons">
         <div class="header-icon" title="Избранное" id="favoritesBtn">
           <i class="fas fa-heart"></i>
+          <span class="badge" id="favoriteCount">0</span>
         </div>
         <div class="header-icon" title="Профиль" id="profileBtn">
           <i class="fas fa-user"></i>
         </div>
         <div class="header-icon" title="Корзина" id="cartBtn">
           <i class="fas fa-shopping-cart"></i>
-          <span class="cart-badge" id="cartBadge">0</span>
+          <span class="badge" id="cartCount">0</span>
         </div>
       </div>
     </div>
@@ -914,9 +767,9 @@
     <div class="filter-bar">
       <div class="filter-controls">
         <div class="filter-group">
-          <label for="categoryFilter">Категория</label>
+          <label for="categoryFilter">Категория:</label>
           <select id="categoryFilter" class="filter-select">
-            <option value="all">Все</option>
+            <option value="all">Все категории</option>
             <option value="crypto">Криптоплатформы</option>
             <option value="payment">Платежные системы</option>
             <option value="social">Социальные сети</option>
@@ -924,68 +777,80 @@
         </div>
 
         <div class="filter-group">
-          <label for="priceFilter">Цена</label>
+          <label for="priceFilter">Цена:</label>
           <select id="priceFilter" class="filter-select">
-            <option value="all">Любая</option>
-            <option value="0-10">$0 - $10</option>
-            <option value="10-20">$10 - $20</option>
-            <option value="20-30">$20 - $30</option>
-            <option value="30+">$30+</option>
+            <option value="all">Любая цена</option>
+            <option value="0-30">$0 - $30</option>
+            <option value="30-50">$30 - $50</option>
+            <option value="50-100">$50 - $100</option>
+            <option value="100+">$100+</option>
           </select>
         </div>
 
         <div class="filter-group">
-          <label for="sortBy">Сортировка</label>
+          <label for="sortBy">Сортировка:</label>
           <select id="sortBy" class="sort-select">
-            <option value="name">По имени</option>
+            <option value="name">По названию</option>
             <option value="price-low">Цена: по возрастанию</option>
             <option value="price-high">Цена: по убыванию</option>
             <option value="rating">По рейтингу</option>
           </select>
         </div>
 
-        <div class="stats" id="resultsCount"></div>
+        <div class="stats">
+          <i class="fas fa-chart-bar"></i>
+          <span id="resultsCount">Показано: 0 из 0</span>
+        </div>
       </div>
     </div>
 
-    <div id="productGrid" class="product-grid"></div>
+    <div id="productGrid" class="product-grid">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Загрузка товаров...</p>
+      </div>
+    </div>
   </div>
 
   <!-- Модальное окно товара -->
   <div id="productModal" class="modal">
     <div class="modal-content">
-      <span class="close" onclick="closeModal('productModal')">&times;</span>
-      <div id="productDetail"></div>
+      <div class="modal-header">
+        <button class="modal-close" onclick="closeModal('productModal')">&times;</button>
+        <div id="modalProductInfo"></div>
+      </div>
+      <div class="modal-body" id="modalProductDetails"></div>
     </div>
   </div>
 
   <!-- Модальное окно профиля -->
   <div id="profileModal" class="modal profile-modal">
     <div class="modal-content">
-      <span class="close" onclick="closeModal('profileModal')">&times;</span>
-
-      <div id="authForm">
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" id="email">
-        </div>
-        <div class="form-group">
-          <label for="password">Пароль</label>
-          <input type="password" id="password">
-        </div>
-        <div class="auth-buttons">
-          <button class="auth-btn login-btn" onclick="login()">Войти</button>
-          <button class="auth-btn register-btn" onclick="register()">Регистрация</button>
-        </div>
+      <div class="modal-header">
+        <button class="modal-close" onclick="closeModal('profileModal')">&times;</button>
+        <h2>Личный кабинет</h2>
       </div>
-
-      <div id="userProfile" style="display:none;">
-        <div class="user-info">
-          <div id="userAvatar" class="user-avatar"></div>
-          <h3 id="userName"></h3>
-          <p id="userEmail"></p>
-          <p id="userJoinDate"></p>
-          <button class="product-button" onclick="logout()">Выйти</button>
+      <div class="modal-body">
+        <div id="profileForm">
+          <div class="form-group">
+            <label for="profileName">Имя:</label>
+            <input type="text" id="profileName" placeholder="Введите ваше имя">
+          </div>
+          <div class="form-group">
+            <label for="profileEmail">Email:</label>
+            <input type="email" id="profileEmail" placeholder="Введите ваш email">
+          </div>
+          <div class="form-group">
+            <label for="profilePhone">Телефон:</label>
+            <input type="tel" id="profilePhone" placeholder="Введите ваш телефон">
+          </div>
+          <button class="btn-primary" onclick="saveProfile()">Сохранить профиль</button>
+        </div>
+        <div id="profileInfo" style="display: none;">
+          <h3>Информация профиля</h3>
+          <div id="profileDetails"></div>
+          <button class="btn-primary" onclick="editProfile()">Редактировать</button>
+          <button class="btn-primary" onclick="logoutProfile()" style="background: #e74c3c; margin-top: 1rem;">Выйти</button>
         </div>
       </div>
     </div>
@@ -994,606 +859,775 @@
   <!-- Модальное окно избранного -->
   <div id="favoritesModal" class="modal">
     <div class="modal-content">
-      <span class="close" onclick="closeModal('favoritesModal')">&times;</span>
-      <div id="favoritesList" class="favorites-grid"></div>
+      <div class="modal-header">
+        <button class="modal-close" onclick="closeModal('favoritesModal')">&times;</button>
+        <h2>Избранные товары</h2>
+      </div>
+      <div class="modal-body">
+        <div id="favoritesList"></div>
+      </div>
     </div>
   </div>
 
-  <!-- Корзина -->
-  <div id="cartOverlay" class="cart-overlay" onclick="closeCart()"></div>
+  <!-- Модальное окно оплаты -->
+  <div id="paymentModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="modal-close" onclick="closeModal('paymentModal')">&times;</button>
+        <h2>Оплата заказа</h2>
+      </div>
+      <div class="modal-body">
+        <div id="paymentContent">
+          <h3>Выберите способ оплаты:</h3>
+          <div class="payment-methods">
+            <div class="payment-method" data-method="bitcoin">
+              <i class="fab fa-bitcoin" style="color: #f7931a;"></i>
+              <span>Bitcoin</span>
+            </div>
+            <div class="payment-method" data-method="ethereum">
+              <i class="fab fa-ethereum" style="color: #627eea;"></i>
+              <span>Ethereum</span>
+            </div>
+            <div class="payment-method" data-method="usdt">
+              <i class="fas fa-dollar-sign" style="color: #26a17b;"></i>
+              <span>USDT</span>
+            </div>
+            <div class="payment-method" data-method="litecoin">
+              <i class="fab fa-bitcoin" style="color: #bfbbbb;"></i>
+              <span>Litecoin</span>
+            </div>
+          </div>
+          <div id="paymentDetails" style="display: none;">
+            <h4>Детали оплаты:</h4>
+            <div id="cryptoAddress"></div>
+            <div id="paymentAmount"></div>
+            <button class="btn-primary" onclick="confirmPayment()">Подтвердить оплату</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Боковая панель корзины -->
   <div id="cartSidebar" class="cart-sidebar">
     <div class="cart-header">
       <h3>Корзина</h3>
-      <span class="close" onclick="closeCart()">&times;</span>
+      <button class="cart-close" onclick="toggleCart()">&times;</button>
     </div>
     <div id="cartItems" class="cart-items"></div>
-    <div class="cart-footer">
-      <div id="cartTotal">Итого: $0</div>
-      <button class="checkout-btn">Оформить</button>
+    <div class="cart-total">
+      <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 700;">
+        <span>Итого:</span>
+        <span id="cartTotal">$0.00</span>
+      </div>
+      <button class="checkout-btn" onclick="openPaymentModal()">Оформить заказ</button>
     </div>
   </div>
 
   <script>
-    // Список товаров
+    // Данные продуктов с кастомными иконками
     const products = [
       // Криптоплатформы
       {
-        id: 1,
-        name: "Binance Pro",
-        category: "crypto",
-        price: 45,
-        rating: 4.9,
-        image: "assets/icons/bnb.png",
-        features: ["KYC Level 2", "Полная верификация", "API доступ"],
-        availability: "in-stock",
-        description: "Профессиональный аккаунт Binance с полной верификацией KYC Level 2. Включает все торговые функции, высокие лимиты и API доступ."
+        id: '1',
+        name: 'Binance Верифицированный Аккаунт',
+        category: 'crypto',
+        price: 45.00,
+        rating: 5,
+        reviews: 128,
+        iconClass: 'fas fa-coins',
+        iconColor: '#f3ba2f',
+        bgColor: '#1e2329',
+        features: ['KYC 2', 'Email доступ', 'API ключи'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии',description: 'Полностью верифицированный аккаунт Binance с уровнем KYC 2'
       },
       {
-        id: 2,
-        name: "Coinbase Premium",
-        category: "crypto",
-        price: 52,
+        id: '2',
+        name: 'Coinbase Pro Аккаунт',
+        category: 'crypto',
+        price: 52.99,
         rating: 4.8,
-        image: "assets/icons/btc.png",
-        features: ["Полная верификация", "Coinbase Pro", "Высокие лимиты"],
-        availability: "in-stock",
-        description: "Премиум аккаунт Coinbase с доступом к Coinbase Pro и высокими лимитами на покупку/продажу криптовалют."
+        reviews: 95,
+        iconClass: 'fab fa-bitcoin',
+        iconColor: '#0052ff',
+        bgColor: '#ffffff',
+        features: ['KYC Level 3', '2FA включен', 'Банковская карта'],
+        availability: 'limited',
+        availabilityText: 'Ограничено',
+        description: 'Профессиональный аккаунт Coinbase с полной верификацией'
       },
       {
-        id: 3,
-        name: "Kraken Advanced",
-        category: "crypto",
-        price: 38,
+        id: '3',
+        name: 'Bybit Премиум Аккаунт',
+        category: 'crypto',
+        price: 38.50,
         rating: 4.7,
-        image: "assets/icons/eth.png",
-        features: ["Tier 3 верификация", "Фьючерсы", "Маржинальная торговля"],
-        availability: "limited",
-        description: "Продвинутый аккаунт Kraken с Tier 3 верификацией, доступом к фьючерсам и маржинальной торговле."
+        reviews: 156,
+        iconClass: 'fas fa-chart-line',
+        iconColor: '#f7931a',
+        bgColor: '#1a1a1a',
+        features: ['VIP Level 1', 'API торговля', 'Фьючерсы'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии',
+        description: 'Премиум аккаунт Bybit для продвинутой торговли'
       },
       {
-        id: 4,
-        name: "KuCoin VIP",
-        category: "crypto",
-        price: 35,
+        id: '4',
+        name: 'Kraken Верифицированный',
+        category: 'crypto',
+        price: 49.99,
         rating: 4.6,
-        image: "assets/icons/kcs.png",
-        features: ["VIP уровень", "Сниженные комиссии", "Приоритетная поддержка"],
-        availability: "in-stock",
-        description: "VIP аккаунт KuCoin со сниженными торговыми комиссиями и приоритетной технической поддержкой."
+        reviews: 89,
+        iconClass: 'fas fa-wave-square',
+        iconColor: '#5741d9',
+        bgColor: '#ffffff',
+        features: ['Tier 3 верификация', 'Фиатные пары', 'Стейкинг'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии',
+        description: 'Полностью верифицированный аккаунт Kraken с максимальными лимитами'
       },
       {
-        id: 5,
-        name: "Bybit Professional",
-        category: "crypto",
-        price: 42,
+        id: '5',
+        name: 'OKX Pro Trading',
+        category: 'crypto',
+        price: 41.00,
         rating: 4.5,
-        image: "assets/icons/usdt.png",
-        features: ["Профессиональная торговля", "Деривативы", "Копи-трейдинг"],
-        availability: "in-stock",
-        description: "Профессиональный аккаунт Bybit для торговли деривативами и участия в копи-трейдинге."
+        reviews: 112,
+        iconClass: 'fas fa-exchange-alt',
+        iconColor: '#000000',
+        bgColor: '#ffffff',
+        features: ['VIP статус', 'Маржинальная торговля', 'DeFi'],
+        availability: 'limited',
+        availabilityText: 'Ограничено',
+        description: 'Профессиональный аккаунт OKX с VIP статусом'
       },
       {
-        id: 6,
-        name: "Gate.io Elite",
-        category: "crypto",
-        price: 29,
+        id: '6',
+        name: 'Huobi Global VIP',
+        category: 'crypto',
+        price: 44.99,
         rating: 4.4,
-        image: "assets/icons/gt.png",
-        features: ["Elite статус", "Startup участие", "NFT торговля"],
-        availability: "in-stock",
-        description: "Elite аккаунт Gate.io с доступом к эксклюзивным startup проектам и NFT торговле."
+        reviews: 78,
+        iconClass: 'fas fa-fire',
+        iconColor: '#2ebd85',
+        bgColor: '#1a1a1a',
+        features: ['VIP 2 уровень', 'P2P торговля', 'Earning'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии',
+        description: 'VIP аккаунт Huobi Global с привилегиями'
       },
       {
-        id: 7,
-        name: "OKX Premium",
-        category: "crypto",
-        price: 48,
-        rating: 4.7,
-        image: "assets/icons/okb.png",
-        features: ["Premium функции", "DeFi доступ", "Опционы"],
-        availability: "limited",
-        description: "Premium аккаунт OKX с доступом к DeFi продуктам и торговле опционами."
-      },
-      {
-        id: 8,
-        name: "Huobi Global Pro",
-        category: "crypto",
-        price: 33,
+        id: '7',
+        name: 'KuCoin Trading Pro',
+        category: 'crypto',
+        price: 36.99,
         rating: 4.3,
-        image: "assets/icons/ht.png",
-        features: ["Global доступ", "Prime List", "P2P торговля"],
-        availability: "in-stock",
-        description: "Professional аккаунт Huobi Global с доступом к Prime List и P2P торговле."
+        reviews: 134,
+        iconClass: 'fas fa-cube',
+        iconColor: '#24ae8f',
+        bgColor: '#ffffff',
+        features: ['VIP Level 1', 'Фьючерсы', 'Pool-X'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии',
+        description: 'Продвинутый аккаунт KuCoin для торговли'
       },
       {
-        id: 9,
-        name: "Bitfinex Advanced",
-        category: "crypto",
-        price: 55,
-        rating: 4.5,
-        image: "assets/icons/leo.png",
-        features: ["Продвинутые ордера", "Lending", "Paper Trading"],
-        availability: "limited",
-        description: "Продвинутый аккаунт Bitfinex с возможностями кредитования и paper trading."
-      },
-      {
-        id: 10,
-        name: "Crypto.com Premium",
-        category: "crypto",
-        price: 59,
-        rating: 4.6,
-        image: "assets/icons/cro.png",
-        features: ["Premium карта", "Stake rewards", "NFT доступ"],
-        availability: "in-stock",
-        description: "Premium аккаунт Crypto.com с доступом к премиум карте и стейкинг наградам."
-      },
-      {
-        id: 11,
-        name: "FTX Professional",
-        category: "crypto",
-        price: 65,
-        rating: 4.8,
-        image: "assets/icons/ftt.png",
-        features: ["Pro торговля", "Tokenized stocks", "Move contracts"],
-        availability: "out-of-stock",
-        description: "Профессиональный аккаунт FTX с доступом к токенизированным акциям."
-      },
-      {
-        id: 12,
-        name: "Gemini Premium",
-        category: "crypto",
-        price: 47,
-        rating: 4.4,
-        image: "assets/icons/gusd.png",
-        features: ["ActiveTrader", "Earn program", "Credit card"],
-        availability: "in-stock",
-        description: "Premium аккаунт Gemini с ActiveTrader интерфейсом и программой Earn."
-      },
-      {
-        id: 13,
-        name: "Bittrex Global",
-        category: "crypto",
-        price: 31,
+        id: '8',
+        name: 'Gate.io Premium',
+        category: 'crypto',
+        price: 33.50,
         rating: 4.2,
-        image: "assets/icons/btc.png",
-        features: ["Global доступ", "Enhanced verification", "OTC торговля"],
-        availability: "in-stock",
-        description: "Global аккаунт Bittrex с расширенной верификацией и OTC торговлей."
+        reviews: 67,
+        iconClass: 'fas fa-door-open',
+        iconColor: '#6c5ce7',
+        bgColor: '#ffffff',
+        features: ['VIP статус', 'Копи-торговля', 'Стартапы'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии',
+        description: 'Премиум аккаунт Gate.io с эксклюзивными возможностями'
       },
-
+      {
+        id: '9',
+        name: 'Bitget Copy Trading',
+        category: 'crypto',
+        price: 39.99,
+        rating: 4.1,
+        reviews: 91,
+        iconClass: 'fas fa-copy',
+        iconColor: '#00d4aa',
+        bgColor: '#1a1a1a',
+        features: ['Copy Trading', 'Фьючерсы', 'Launchpad'],
+        availability: 'limited',
+        availabilityText: 'Ограничено',
+        description: 'Специализированный аккаунт Bitget для копи-торговли'
+      },
+      {
+        id: '10',
+        name: 'Mexc Exchange Pro',
+        category: 'crypto',
+        price: 31.99,
+        rating: 4.0,
+        reviews: 103,
+        iconClass: 'fas fa-mountain',
+        iconColor: '#00c9a7',
+        bgColor: '#ffffff',
+        features: ['VIP уровень', 'Margin торговля', 'Kickstarter'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии',
+        description: 'Профессиональный аккаунт MEXC с расширенными функциями'
+      },
       // Платежные системы
       {
-        id: 14,
-        name: "PayPal Business",
-        category: "payment",
-        price: 25,
-        rating: 4.7,
-        image: "assets/icons/paypal-2.svg",
-        features: ["Business аккаунт", "Международные переводы", "API интеграция"],
-        availability: "in-stock",
-        description: "Верифицированный Business аккаунт PayPal с возможностью международных переводов."
+        id: '11',
+        name: 'Revolut Business',
+        category: 'payment',
+        price: 79.99,
+        rating: 4.9,
+        reviews: 245,
+        iconClass: 'fas fa-credit-card',
+        iconColor: '#0075eb',
+        bgColor: '#ffffff',
+        features: ['Business аккаунт', 'Мультивалюта', 'API интеграция'],
+        availability: 'limited',
+        availabilityText: 'Ограничено',
+        description: 'Бизнес аккаунт Revolut с полным доступом'
       },
       {
-        id: 15,
-        name: "Stripe Professional",
-        category: "payment",
-        price: 35,
+        id: '12',
+        name: 'Wise Multi-Currency',
+        category: 'payment',
+        price: 89.50,
         rating: 4.8,
-        image: "assets/icons/stripe-4.svg",
-        features: ["Полная верификация", "Atlas поддержка", "Connect платформа"],
-        availability: "limited",
-        description: "Профессиональный аккаунт Stripe с полной верификацией и поддержкой Atlas."
+        reviews: 189,
+        iconClass: 'fas fa-globe',
+        iconColor: '#37517e',
+        bgColor: '#ffffff',
+        features: ['40+ валют', 'IBAN счета', 'Дебетовая карта'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии',
+        description: 'Мультивалютный аккаунт Wise для международных переводов'
       },
       {
-        id: 16,
-        name: "Wise Business",
-        category: "payment",
-        price: 28,
+        id: '13',
+        name: 'Stripe Business Account',
+        category: 'payment',
+        price: 149.99,
+        rating: 4.7,
+        reviews: 167,
+        iconClass: 'fas fa-stripe-s',
+        iconColor: '#635bff',
+        bgColor: '#ffffff',
+        features: ['Express Dashboard', 'Connect платформа', 'Radar защита'],
+        availability: 'limited',
+        availabilityText: 'Ограничено',
+        description: 'Готовый к работе Stripe аккаунт для онлайн-бизнеса'
+      },
+      {
+        id: '14',
+        name: 'PayPal Business Verified',
+        category: 'payment',
+        price: 129.99,
         rating: 4.6,
-        image: "assets/icons/wise-2.svg",
-        features: ["Мультивалютный счет", "Международные переводы", "API доступ"],
-        availability: "in-stock",
-        description: "Business аккаунт Wise (TransferWise) с мультивалютным счетом."
+        reviews: 298,
+        iconClass: 'fab fa-paypal',
+        iconColor: '#00457c',
+        bgColor: '#ffffff',
+        features: ['Business верификация', 'API доступ', 'Chargeback защита'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии',
+        description: 'Верифицированный PayPal Business для коммерции'
       },
       {
-        id: 17,
-        name: "Revolut Business",
-        category: "payment",
-        price: 32,
-        rating: 4.5,
-        image: "assets/icons/revolut-2.svg",
-        features: ["Business функции", "Crypto торговля", "Expense management"],
-        availability: "in-stock",
-        description: "Business аккаунт Revolut с возможностями торговли криптовалютами."
-      },
-      {
-        id: 18,
-        name: "Skrill VIP",
-        category: "payment",
-        price: 22,
-        rating: 4.3,
-        image: "assets/icons/skrill-1.svg",
-        features: ["VIP статус", "Криптовалюты", "Сниженные комиссии"],
-        availability: "in-stock",
-        description: "VIP аккаунт Skrill со сниженными комиссиями и поддержкой криптовалют."
-      },
-      {
-        id: 19,
-        name: "Neteller Premium",
-        category: "payment",
-        price: 24,
-        rating: 4.2,
-        image: "assets/icons/neteller-1.svg",
-        features: ["Premium уровень", "Net+ карта", "Crypto exchange"],
-        availability: "in-stock",
-        description: "Premium аккаунт Neteller с Net+ картой и криптовалютной биржей."
-      },
-      {
-        id: 20,
-        name: "Payoneer Professional",
-        category: "payment",
-        price: 27,
+        id: '15',
+        name: 'Advcash Premium',
+        category: 'payment',
+        price: 67.99,
         rating: 4.4,
-        image: "assets/icons/payoneer-2.svg",
-        features: ["Professional аккаунт", "Global payment", "Tax solutions"],
-        availability: "limited",
-        description: "Professional аккаунт Payoneer с глобальными платежными решениями."
+        reviews: 134,
+        iconClass: 'fas fa-wallet',
+        iconColor: '#1976d2',
+        bgColor: '#ffffff',
+        features: ['Gold статус', 'Пластиковая карта', 'Криптообмен'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии',
+        description: 'Премиум аккаунт AdvCash с максимальными лимитами'
       },
       {
-        id: 21,
-        name: "Perfect Money Verified",
-        category: "payment",
-        price: 18,
+        id: '16',
+        name: 'Perfect Money Verified',
+        category: 'payment',
+        price: 45.99,
+        rating: 4.2,
+        reviews: 156,
+        iconClass: 'fas fa-dollar-sign',
+        iconColor: '#ffd700',
+        bgColor: '#1a1a1a',
+        features: ['Полная верификация', 'API торговля', 'Обменник'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии',
+        description: 'Верифицированный Perfect Money с полным доступом'
+      },
+      {
+        id: '17',
+        name: 'Skrill VIP Account',
+        category: 'payment',
+        price: 99.99,
+        rating: 4.5,
+        reviews: 178,
+        iconClass: 'fas fa-money-check-alt',
+        iconColor: '#862165',
+        bgColor: '#ffffff',
+        features: ['VIP статус', 'Prepaid Mastercard', 'Криптоуслуги'],
+        availability: 'limited',
+        availabilityText: 'Ограничено',
+        description: 'VIP аккаунт Skrill с эксклюзивными привилегиями'
+      },
+      {
+        id: '18',
+        name: 'Neteller Premium Plus',
+        category: 'payment',
+        price: 85.50,
+        rating: 4.3,
+        reviews: 123,
+        iconClass: 'fas fa-university',
+        iconColor: '#00ac13',
+        bgColor: '#ffffff',
+        features: ['Premium Plus', 'Net+ карта', 'Криптообмен'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии',
+        description: 'Премиум аккаунт NETELLER с расширенными возможностями'
+      },
+      {
+        id: '19',
+        name: 'Payeer Business',
+        category: 'payment',
+        price: 55.99,
         rating: 4.1,
-        image: "assets/icons/bitcoin-btc-logo.svg",
-        features: ["Verified статус", "Все валюты", "API доступ"],
-        availability: "in-stock",
-        description: "Верифицированный аккаунт Perfect Money со всеми доступными валютами."
+        reviews: 145,
+        iconClass: 'fas fa-handshake',
+        iconColor: '#ff6b35',
+        bgColor: '#ffffff',
+        features: ['Business статус', 'Mass Pay', 'Обменник'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии',
+        description: 'Бизнес аккаунт Payeer для массовых выплат'
       },
       {
-        id: 22,
-        name: "WebMoney Professional",
-        category: "payment",
-        price: 21,
-        rating: 4.0,
-        image: "assets/icons/w-6.svg",
-        features: ["Professional статус", "Все кошельки", "Keeper Mobile"],
-        availability: "in-stock",
-        description: "Professional аккаунт WebMoney со всеми типами кошельков."
+        id: '20',
+        name: 'Payoneer Master Account',
+        category: 'payment',
+        price: 119.99,
+        rating: 4.7,
+        reviews: 201,
+        iconClass: 'fas fa-credit-card',
+        iconColor: '#ff4800',
+        bgColor: '#ffffff',
+        features: ['Prepaid Mastercard', 'Global банк', 'Tax форма'],
+        availability: 'limited',
+        availabilityText: 'Ограничено',
+        description: 'Мастер аккаунт Payoneer для глобальных платежей'
       },
-      {
-        id: 23,
-        name: "Advcash Premium",
-        category: "payment",
-        price: 19,
-        rating: 3.9,
-        image: "assets/icons/bitcoin-btc-logo.svg",
-        features: ["Premium функции", "Crypto поддержка", "Пластиковые карты"],
-        availability: "in-stock",
-        description: "Premium аккаунт AdvCash с поддержкой криптовалют и пластиковыми картами."
-      },
-      {
-        id: 24,
-        name: "Paxum Verified",
-        category: "payment",
-        price: 16,
-        rating: 3.8,
-        image: "assets/icons/p-6.svg",
-        features: ["Verified аккаунт", "Prepaid карта", "Wire transfers"],
-        availability: "in-stock",
-        description: "Верифицированный аккаунт Paxum с предоплаченной картой."
-      },
-      {
-        id: 25,
-        name: "Payza Professional",
-        category: "payment",
-        price: 23,
-        rating: 3.7,
-        image: "assets/icons/bitcoin-btc-logo.svg",
-        features: ["Professional уровень", "Business tools", "Multi-currency"],
-        availability: "out-of-stock",
-        description: "Professional аккаунт Payza с бизнес инструментами."
-      },
-
       // Социальные сети
       {
-        id: 26,
-        name: "Facebook Business Manager",
-        category: "social",
-        price: 15,
-        rating: 4.5,
-        image: "assets/icons/facebook-3.svg",
-        features: ["Business Manager", "Ads Manager", "Pixel доступ"],
-        availability: "in-stock",
-        description: "Аккаунт Facebook с настроенным Business Manager и доступом к рекламным инструментам."
+        id: '21',
+        name: 'Facebook Business Manager',
+        category: 'social',
+        price: 89.99,
+        rating: 4.8,
+        reviews: 312,
+        iconClass: 'fab fa-facebook-f',
+        iconColor: '#1877f2',
+        bgColor: '#ffffff',
+        features: ['Business Manager', 'Ads аккаунт', 'Pixel настроен'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии',
+        description: 'Настроенный Facebook Business Manager для рекламы'
       },
       {
-        id: 27,
-        name: "Instagram Business Pro",
-        category: "social",
-        price: 12,
-        rating: 4.4,
-        image: "assets/icons/instagram-2016-5.svg",
-        features: ["Business профиль", "Instagram Shopping", "Creator Studio"],
-        availability: "in-stock",
-        description: "Business аккаунт Instagram с включенным Shopping и доступом к Creator Studio."
-      },
-      {
-        id: 28,
-        name: "Twitter Blue Verified",
-        category: "social",
-        price: 18,
-        rating: 4.3,
-        image: "assets/icons/twitter-6.svg",
-        features: ["Twitter Blue", "Verified badge", "Advanced features"],
-        availability: "limited",
-        description: "Верифицированный аккаунт Twitter с подпиской Twitter Blue."
-      },
-      {
-        id: 29,
-        name: "LinkedIn Premium",
-        category: "social",
-        price: 22,
+        id: '22',
+        name: 'Instagram Business Pro',
+        category: 'social',
+        price: 65.99,
         rating: 4.6,
-        image: "assets/icons/linkedin-icon-2.svg",
-        features: ["Premium подписка", "InMail credits", "Advanced search"],
-        availability: "in-stock",
-        description: "Premium аккаунт LinkedIn с InMail кредитами и расширенным поиском."
+        reviews: 267,
+        iconClass: 'fab fa-instagram',
+        iconColor: '#e4405f',
+        bgColor: '#ffffff',
+        features: ['Business профиль', '10K подписчиков', 'Verified badge'],
+        availability: 'limited',
+        availabilityText: 'Ограничено',
+        description: 'Бизнес профиль Instagram с аудиторией и верификацией'
       },
       {
-        id: 30,
-        name: "YouTube Partner Program",
-        category: "social",
-        price: 35,
-        rating: 4.7,
-        image: "assets/icons/youtube-icon.svg",
-        features: ["Monetization", "Partner Program", "Custom thumbnails"],
-        availability: "limited",
-        description: "YouTube канал с подключенной монетизацией и участием в Partner Program."
-      },
-      {
-        id: 31,
-        name: "TikTok Pro Account",
-        category: "social",
-        price: 14,
-        rating: 4.2,
-        image: "assets/icons/tiktok-icon-2.svg",
-        features: ["Pro аккаунт", "Analytics", "Business tools"],
-        availability: "in-stock",
-        description: "Pro аккаунт TikTok с аналитикой и бизнес инструментами."
-      },
-      {
-        id: 32,
-        name: "Telegram Premium",
-        category: "social",
-        price: 8,
-        rating: 4.1,
-        image: "assets/icons/telegram.svg",
-        features: ["Premium подписка", "Advanced features", "File limits"],
-        availability: "in-stock",
-        description: "Telegram аккаунт с Premium подпиской и расширенными возможностями."
-      },
-      {
-        id: 33,
-        name: "Discord Nitro",
-        category: "social",
-        price: 10,
-        rating: 4.0,
-        image: "assets/icons/discord-6.svg",
-        features: ["Nitro подписка", "Server boosts", "HD streaming"],
-        availability: "in-stock",
-        description: "Discord аккаунт с Nitro подпиской и server boosts."
-      },
-      {
-        id: 34,
-        name: "Reddit Premium",
-        category: "social",
-        price: 6,
-        rating: 3.9,
-        image: "assets/icons/reddit-4.svg",
-        features: ["Premium подписка", "Ad-free", "Monthly coins"],
-        availability: "in-stock",
-        description: "Reddit аккаунт с Premium подпиской без рекламы."
-      },
-      {
-        id: 35,
-        name: "Pinterest Business",
-        category: "social",
-        price: 11,
-        rating: 4.1,
-        image: "assets/icons/pinterest-badge.svg",
-        features: ["Business аккаунт", "Pinterest Ads", "Analytics"],
-        availability: "in-stock",
-        description: "Business аккаунт Pinterest с доступом к рекламе и аналитике."
-      },
-      {
-        id: 36,
-        name: "Snapchat Business",
-        category: "social",
-        price: 13,
-        rating: 3.8,
-        image: "assets/icons/snapchat-2.svg",
-        features: ["Business профиль", "Snap Ads", "Lens Studio"],
-        availability: "in-stock",
-        description: "Business аккаунт Snapchat с доступом к рекламным инструментам."
-      },
-      {
-        id: 37,
-        name: "WhatsApp Business API",
-        category: "social",
-        price: 25,
-        rating: 4.3,
-        image: "assets/icons/whatsapp-4.svg",
-        features: ["Business API", "Automation", "Multiple agents"],
-        availability: "limited",
-        description: "WhatsApp Business аккаунт с API доступом для автоматизации."
-      },
-      {
-        id: 38,
-        name: "Twitch Partner",
-        category: "social",
-        price: 45,
+        id: '23',
+        name: 'TikTok Creator Fund',
+        category: 'social',
+        price: 79.99,
         rating: 4.5,
-        image: "assets/icons/twitch-1.svg",
-        features: ["Partner Program", "Monetization", "Custom emotes"],
-        availability: "out-of-stock",
-        description: "Twitch канал с Partner статусом и возможностями монетизации."
+        reviews: 189,
+        iconClass: 'fab fa-tiktok',
+        iconColor: '#000000',
+        bgColor: '#ff0050',
+        features: ['Creator Fund', '50K подписчиков', 'Monetization'],
+        availability: 'limited',
+        availabilityText: 'Ограничено',
+        description: 'TikTok аккаунт с доступом к Creator Fund'
       },
       {
-        id: 39,
-        name: "OnlyFans Creator",
-        category: "social",
-        price: 28,
-        rating: 4.0,
-        image: "assets/icons/onlyfans-1.svg",
-        features: ["Creator аккаунт", "Monetization", "Analytics"],
-        availability: "limited",
-        description: "Creator аккаунт OnlyFans с настроенной монетизацией."
+        id: '24',
+        name: 'YouTube Partner Program',
+        category: 'social',
+        price: 199.99,
+        rating: 4.9,
+        reviews: 156,
+        iconClass: 'fab fa-youtube',
+        iconColor: '#ff0000',
+        bgColor: '#ffffff',
+        features: ['Partner Program', '1000+ подписчиков', '4000+ часов'],
+        availability: 'limited',
+        availabilityText: 'Ограничено',
+        description: 'YouTube канал с партнерской программой для монетизации'
       },
       {
-        id: 40,
-        name: "Clubhouse Creator",
-        category: "social",
-        price: 20,
-        rating: 3.6,
-        image: "assets/icons/clubhouse-2.svg",
-        features: ["Creator функции", "Room hosting", "Follower base"],
-        availability: "in-stock",
-        description: "Clubhouse аккаунт с Creator функциями и базой подписчиков."
+        id: '25',
+        name: 'Twitter Blue Verified',
+        category: 'social',
+        price: 299.99,
+        rating: 4.7,
+        reviews: 98,
+        iconClass: 'fab fa-twitter',
+        iconColor: '#1da1f2',
+        bgColor: '#ffffff',
+        features: ['Blue подписка', 'Verified badge', '25K подписчиков'],
+        availability: 'out-of-stock',
+        availabilityText: 'Нет в наличии',
+        description: 'Верифицированный Twitter аккаунт с Blue подпиской'
+      },
+      {
+        id: '26',
+        name: 'LinkedIn Premium Business',
+        category: 'social',
+        price: 149.99,
+        rating: 4.4,
+        reviews: 134,
+        iconClass: 'fab fa-linkedin-in',
+        iconColor: '#0077b5',
+        bgColor: '#ffffff',
+        features: ['Premium Business', '5000+ связей', 'Sales Navigator'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии',
+        description: 'Premium LinkedIn аккаунт для B2B продаж'
+      },
+      {
+        id: '27',
+        name: 'Telegram Premium Channel',
+        category: 'social',
+        price: 45.99,
+        rating: 4.2,
+        reviews: 167,
+        iconClass: 'fab fa-telegram-plane',
+        iconColor: '#0088cc',
+        bgColor: '#ffffff',
+        features: ['Premium подписка', '10K подписчиков', 'Monetization'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии',
+        description: 'Telegram канал с Premium подпиской и аудиторией'
+      },
+      {
+        id: '28',
+        name: 'Discord Nitro Server',
+        category: 'social',
+        price: 39.99,
+        rating: 4.1,
+        reviews: 89,
+        iconClass: 'fab fa-discord',
+        iconColor: '#5865f2',
+        bgColor: '#ffffff',
+        features: ['Nitro подписка', '1000+ участников', 'Custom URL'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии',
+        description: 'Discord сервер с Nitro и активным сообществом'
+      },
+      {
+        id: '29',
+        name: 'Reddit Premium Account',
+        category: 'social',
+        price: 29.99,
+        rating: 3.9,
+        reviews: 76,
+        iconClass: 'fab fa-reddit-alien',
+        iconColor: '#ff4500',
+        bgColor: '#ffffff',
+        features: ['Premium подписка', 'High karma', 'Aged account'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии',
+        description: 'Старый Reddit аккаунт с Premium и высокой кармой'
+      },
+      {
+        id: '30',
+        name: 'Twitch Affiliate Program',
+        category: 'social',
+        price: 159.99,
+        rating: 4.6,
+        reviews: 112,
+        iconClass: 'fab fa-twitch',
+        iconColor: '#9146ff',
+        bgColor: '#ffffff',
+        features: ['Affiliate статус', '500+ подписчиков', 'Donations setup'],
+        availability: 'limited',
+        availabilityText: 'Ограничено',
+        description: 'Twitch канал с Affiliate программой для стримеров'
+      },
+      // Дополнительные продукты
+      {
+        id: '31',
+        name: 'WhatsApp Business API',
+        category: 'social',
+        price: 199.99,
+        rating: 4.8,
+        reviews: 145,
+        iconClass: 'fab fa-whatsapp',
+        iconColor: '#25d366',
+        bgColor: '#ffffff',
+        features: ['Business API', 'Verified профиль', 'Green badge'],
+        availability: 'limited',
+        availabilityText: 'Ограничено',
+        description: 'WhatsApp Business API для корпоративных клиентов'
+      },
+      {
+        id: '32',
+        name: 'Shopify Partners Account',
+        category: 'payment',
+        price: 299.99,
+        rating: 4.7,
+        reviews: 98,
+        iconClass: 'fas fa-shopping-bag',
+        iconColor: '#96bf48',
+        bgColor: '#ffffff',
+        features: ['Partners статус', 'Development store', 'Commission'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии',
+        description: 'Shopify Partners аккаунт для разработчиков'
+      },
+      {
+        id: '33',
+        name: 'Amazon Seller Central',
+        category: 'payment',
+        price: 449.99,
+        rating: 4.9,
+        reviews: 167,
+        iconClass: 'fab fa-amazon',
+        iconColor: '#ff9900',
+        bgColor: '#232f3e',
+        features: ['Professional план', 'Brand Registry', 'FBA готов'],
+        availability: 'limited',
+        availabilityText: 'Ограничено',
+        description: 'Amazon Seller Central с профессиональным планом'
+      },
+      {
+        id: '34',
+        name: 'eBay PowerSeller Account',
+        category: 'payment',
+        price: 189.99,
+        rating: 4.5,
+        reviews: 134,
+        iconClass: 'fab fa-ebay',
+        iconColor: '#0064d2',
+        bgColor: '#ffffff',
+        features: ['PowerSeller статус', 'Top Rated', '10000+ отзывов'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии',
+        description: 'eBay PowerSeller аккаунт с отличной репутацией'
+      },
+      {
+        id: '35',
+        name: 'Etsy Premium Shop',
+        category: 'payment',
+        price: 99.99,
+        rating: 4.3,
+        reviews: 89,
+        iconClass: 'fab fa-etsy',
+        iconColor: '#f56400',
+        bgColor: '#ffffff',
+        features: ['Premium listing', '5-star rating', '1000+ продаж'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии',
+        description: 'Премиум магазин Etsy с высоким рейтингом'
+      },
+      {
+        id: '36',
+        name: 'Google Ads Threshold Account',
+        category: 'social',
+        price: 159.99,
+        rating: 4.6,
+        reviews: 123,
+        iconClass: 'fab fa-google',
+        iconColor: '#4285f4',
+        bgColor: '#ffffff',
+        features: ['$350 threshold', 'Verified', 'Spending history'],
+        availability: 'limited',
+        availabilityText: 'Ограничено',
+        description: 'Google Ads аккаунт с высоким порогом оплаты'
+      },
+      {
+        id: '37',
+        name: 'Microsoft Ads Professional',
+        category: 'social',
+        price: 89.99,
+        rating: 4.2,
+        reviews: 67,
+        iconClass: 'fab fa-microsoft',
+        iconColor: '#00a1f1',
+        bgColor: '#ffffff',
+        features: ['Professional план', 'API доступ', 'Spending cap'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии',
+        description: 'Microsoft Ads аккаунт для профессиональной рекламы'
+      },
+      {
+        id: '38',
+        name: 'Apple Developer Program',
+        category: 'payment',
+        price: 249.99,
+        rating: 4.8,
+        reviews: 156,
+        iconClass: 'fab fa-apple',
+        iconColor: '#000000',
+        bgColor: '#ffffff',
+        features: ['Developer лицензия', 'App Store Connect', 'TestFlight'],
+        availability: 'limited',
+        availabilityText: 'Ограничено',
+        description: 'Apple Developer Program для публикации приложений'
+      },
+      {
+        id: '39',
+        name: 'Google Play Console',
+        category: 'payment',
+        price: 149.99,
+        rating: 4.4,
+        reviews: 134,
+        iconClass: 'fab fa-google-play',
+        iconColor: '#01875f',
+        bgColor: '#ffffff',
+        features: ['Developer аккаунт', 'Play Console', 'In-app billing'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии',
+        description: 'Google Play Console для разработчиков Android'
+      },
+      {
+        id: '40',
+        name: 'Spotify Artist Profile',
+        category: 'social',
+        price: 79.99,
+        rating: 4.1,
+        reviews: 89,
+        iconClass: 'fab fa-spotify',
+        iconColor: '#1db954',
+        bgColor: '#000000',
+        features: ['Artist профиль', 'Verified badge', '10K слушателей'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии',
+        description: 'Spotify Artist профиль с верификацией и аудиторией'
       }
     ];
 
     // Состояние приложения
-    let filteredProducts = [...products];
-    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+    let state = {
+      products: products,
+      filteredProducts: products,
+      cart: JSON.parse(localStorage.getItem('cart')) || [],
+      favorites: JSON.parse(localStorage.getItem('favorites')) || [],
+      profile: JSON.parse(localStorage.getItem('profile')) || null,
+      currentFilters: {
+        search: '',
+        category: 'all',
+        price: 'all',
+        sort: 'name'
+      }
+    };
 
-    // Инициализация
+    // Инициализация приложения
     document.addEventListener('DOMContentLoaded', function() {
-      renderProducts();
-      updateCartBadge();
-      setupEventListeners();
-      checkAuthStatus();
+      initializeApp();
+      loadProfile();
+      updateUI();
     });
 
-    function setupEventListeners() {
-      // Поиск
-      document.getElementById('searchInput').addEventListener('input', filterProducts);
+    function initializeApp() {
+      // Обработчики событий
+      document.getElementById('searchInput').addEventListener('input', handleSearch);
+      document.getElementById('categoryFilter').addEventListener('change', handleFilters);
+      document.getElementById('priceFilter').addEventListener('change', handleFilters);
+      document.getElementById('sortBy').addEventListener('change', handleFilters);
 
-      // Фильтры
-      document.getElementById('categoryFilter').addEventListener('change', filterProducts);
-      document.getElementById('priceFilter').addEventListener('change', filterProducts);
-      document.getElementById('sortBy').addEventListener('change', filterProducts);
-
-      // Кнопки в хедере
       document.getElementById('cartBtn').addEventListener('click', toggleCart);
       document.getElementById('profileBtn').addEventListener('click', () => openModal('profileModal'));
-      document.getElementById('favoritesBtn').addEventListener('click', () => {
-        renderFavorites();
-        openModal('favoritesModal');
+      document.getElementById('favoritesBtn').addEventListener('click', showFavorites);
+
+      // Обработчики способов оплаты
+      document.querySelectorAll('.payment-method').forEach(method => {
+        method.addEventListener('click', selectPaymentMethod);
       });
 
-      // Закрытие корзины
-      document.getElementById('cartOverlay').addEventListener('click', closeCart);
-
-      // Криптовалютные опции
-      document.querySelectorAll('.crypto-option').forEach(option => {
-        option.addEventListener('click', function() {
-          document.querySelectorAll('.crypto-option').forEach(opt => opt.classList.remove('selected'));
-          this.classList.add('selected');
-          showPaymentDetails(this.dataset.crypto);
+      // Закрытие модальных окон при клике вне них
+      document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+          if (e.target === this) {
+            closeModal(this.id);
+          }
         });
       });
+
+      // Первоначальная загрузка продуктов
+      setTimeout(() => {
+        renderProducts();
+      }, 1000);
     }
 
-    function renderProducts() {
-      const grid = document.getElementById('productGrid');
+    function handleSearch(e) {
+      state.currentFilters.search = e.target.value.toLowerCase();
+      applyFilters();
+    }
 
-      if (filteredProducts.length === 0) {
-        grid.innerHTML = `
-          <div class="no-results">
-            <i class="fas fa-search"></i>
-            <h3>Товары не найдены</h3>
-            <p>Попробуйте изменить параметры поиска или фильтры</p>
-          </div>
-        `;
-        updateResultsCount();
-        return;
+    function handleFilters() {
+      state.currentFilters.category = document.getElementById('categoryFilter').value;
+      state.currentFilters.price = document.getElementById('priceFilter').value;
+      state.currentFilters.sort = document.getElementById('sortBy').value;
+      applyFilters();
+    }
+
+    function applyFilters() {
+      let filtered = [...state.products];
+
+      // Поиск
+      if (state.currentFilters.search) {
+        filtered = filtered.filter(product => 
+          product.name.toLowerCase().includes(state.currentFilters.search) ||
+          product.description.toLowerCase().includes(state.currentFilters.search)
+        );
       }
 
-      grid.innerHTML = filteredProducts.map(product => `
-        <div class="product-card" onclick="openProductDetail(${product.id})">
-          <button class="favorite-btn ${favorites.includes(product.id) ? 'active' : ''}"
-                  onclick="event.stopPropagation(); toggleFavorite(${product.id})">
-            <i class="fas fa-heart"></i>
-          </button>
+      // Категория
+      if (state.currentFilters.category !== 'all') {
+        filtered = filtered.filter(product => product.category === state.currentFilters.category);
+      }
 
-          <div class="availability ${product.availability}">
-            ${getAvailabilityText(product.availability)}
-          </div>
-
-          <div class="product-top">
-            <div class="logo-wrapper">
-              <img src="${product.image}" alt="${product.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"80\" height=\"80\" viewBox=\"0 0 80 80\"><rect width=\"80\" height=\"80\" fill=\"%23667eea\"/><text x=\"40\" y=\"45\" text-anchor=\"middle\" fill=\"white\" font-size=\"14\">${product.name.charAt(0)}</text></svg>'">
-            </div>
-          </div>
-
-          <div class="product-info">
-            <div class="product-rating">
-              ${generateStars(product.rating)}
-              <span class="rating-text">${product.rating}</span>
-            </div>
-
-            <h3 class="product-title">${product.name}</h3>
-            <div class="product-category">${getCategoryName(product.category)}</div>
-
-            <div class="product-features">
-              ${product.features.map(feature => `<span class="feature-badge">${feature}</span>`).join('')}
-            </div>
-          </div>
-
-          <div class="product-bottom">
-            <div class="product-price">$${product.price}</div>
-            <button class="product-button" onclick="event.stopPropagation(); addToCart(${product.id})">
-              В корзину
-            </button>
-          </div>
-        </div>
-      `).join('');
-
-      updateResultsCount();
-    }
-
-    function filterProducts() {
-      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-      const categoryFilter = document.getElementById('categoryFilter').value;
-      const priceFilter = document.getElementById('priceFilter').value;
-      const sortBy = document.getElementById('sortBy').value;
-
-      filteredProducts = products.filter(product => {
-        const matchesSearch = product.name.toLowerCase().includes(searchTerm) ||
-                              product.features.some(feature => feature.toLowerCase().includes(searchTerm));
-
-        const matchesCategory = categoryFilter === 'all' || product.category === categoryFilter;
-
-        let matchesPrice = true;
-        if (priceFilter !== 'all') {
-          const [min, max] = priceFilter.split('-').map(p => p.replace('+', ''));
-          const price = product.price;
+      // Цена
+      if (state.currentFilters.price !== 'all') {
+        const [min, max] = state.currentFilters.price.split('-').map(p => p.replace('+', ''));
+        filtered = filtered.filter(product => {
           if (max) {
-            matchesPrice = price >= parseInt(min) && price <= parseInt(max);
+            return product.price >= parseInt(min) && product.price <= parseInt(max);
           } else {
-            matchesPrice = price >= parseInt(min);
+            return product.price >= parseInt(min);
           }
-        }
-
-        return matchesSearch && matchesCategory && matchesPrice;
-      });
+        });
+      }
 
       // Сортировка
-      filteredProducts.sort((a, b) => {
-        switch (sortBy) {
+      filtered.sort((a, b) => {
+        switch (state.currentFilters.sort) {
           case 'price-low':
             return a.price - b.price;
           case 'price-high':
@@ -1606,185 +1640,161 @@
         }
       });
 
+      state.filteredProducts = filtered;
       renderProducts();
     }
 
+    function renderProducts() {
+      const grid = document.getElementById('productGrid');
+      const resultsCount = document.getElementById('resultsCount');
+
+      resultsCount.textContent = `Показано: ${state.filteredProducts.length} из ${state.products.length}`;
+
+      if (state.filteredProducts.length === 0) {
+        grid.innerHTML = `
+          <div class="no-results">
+            <i class="fas fa-search"></i>
+            <h3>Товары не найдены</h3>
+            <p>Попробуйте изменить параметры поиска</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = state.filteredProducts.map(product => `
+        <div class="product-card" data-id="${product.id}">
+          <button class="favorite-btn ${isFavorite(product.id) ? 'active' : ''}" onclick="toggleFavorite('${product.id}')">
+            <i class="fas fa-heart"></i>
+          </button>
+
+          <div class="availability ${product.availability}">
+            ${product.availabilityText}
+          </div>
+
+          <div class="product-top" onclick="showProductDetails('${product.id}')">
+            <div class="logo-wrapper">
+              <div class="logo-icon" style="background: ${product.bgColor}; color: ${product.iconColor};">
+                <i class="${product.iconClass}"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="product-info">
+            <div class="product-rating">
+              ${generateStars(product.rating)}
+              <span class="rating-text">(${product.reviews} отзывов)</span>
+            </div>
+
+            <h3 class="product-title">${product.name}</h3>
+            <p class="product-category">${getCategoryName(product.category)}</p>
+
+            <div class="product-features">
+              ${product.features.map(feature => `<span class="feature-badge">${feature}</span>`).join('')}
+            </div>
+          </div>
+
+          <div class="product-bottom">
+            <div class="product-price">$${product.price.toFixed(2)}</div>
+            <button class="product-button" onclick="addToCart('${product.id}')" 
+                    ${product.availability === 'out-of-stock' ? 'disabled' : ''}>
+              ${product.availability === 'out-of-stock' ? 'Нет в наличии' : 'Купить'}
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
     function generateStars(rating) {
-      const stars = [];
       const fullStars = Math.floor(rating);
       const hasHalfStar = rating % 1 !== 0;
+      letstars = '';
 
       for (let i = 0; i < fullStars; i++) {
-        stars.push('<i class="fas fa-star star"></i>');
+        stars += '<i class="fas fa-star star"></i>';
       }
 
       if (hasHalfStar) {
-        stars.push('<i class="fas fa-star-half-alt star"></i>');
+        stars += '<i class="fas fa-star-half-alt star"></i>';
       }
 
       const emptyStars = 5 - Math.ceil(rating);
       for (let i = 0; i < emptyStars; i++) {
-        stars.push('<i class="far fa-star star"></i>');
+        stars += '<i class="far fa-star star"></i>';
       }
 
-      return stars.join('');
+      return stars;
     }
 
     function getCategoryName(category) {
       const categories = {
-        crypto: 'Криптоплатформы',
-        payment: 'Платежные системы',
-        social: 'Социальные сети'
+        'crypto': 'Криптоплатформы',
+        'payment': 'Платежные системы',
+        'social': 'Социальные сети'
       };
       return categories[category] || category;
     }
 
-    function getAvailabilityText(availability) {
-      const texts = {
-        'in-stock': 'В наличии',
-        'limited': 'Ограничено',
-        'out-of-stock': 'Нет в наличии'
-      };
-      return texts[availability] || availability;
-    }
-
-    function updateResultsCount() {
-      document.getElementById('resultsCount').textContent =
-        `Показано: ${filteredProducts.length} из ${products.length}`;
-    }
-
-    function addToCart(productId) {
-      const product = products.find(p => p.id === productId);
-      const existingItem = cart.find(item => item.id === productId);
-
-      if (existingItem) {
-        existingItem.quantity += 1;
-      } else {
-        cart.push({ ...product, quantity: 1 });
-      }
-      localStorage.setItem('cart', JSON.stringify(cart));
-      updateCartBadge();
-      showNotification('Товар добавлен в корзину!');
-    }
-
-    function toggleCart() {
-      document.getElementById('cartSidebar').classList.toggle('open');
-      document.getElementById('cartOverlay').classList.toggle('open');
-      renderCartItems();
-    }
-
-    function closeCart() {
-      document.getElementById('cartSidebar').classList.remove('open');
-      document.getElementById('cartOverlay').classList.remove('open');
-    }
-
-    function updateCartBadge() {
-      document.getElementById('cartBadge').textContent = cart.reduce((total, item) => total + item.quantity, 0);
-    }
-
-    function renderCartItems() {
-      const cartItemsContainer = document.getElementById('cartItems');
-      if (cart.length === 0) {
-        cartItemsContainer.innerHTML = '<p class="no-results">Корзина пуста</p>';
-        document.getElementById('cartTotal').textContent = 'Итого: $0';
-        return;
-      }
-
-      cartItemsContainer.innerHTML = cart.map(item => `
-        <div class="cart-item">
-          <img src="${item.image}" alt="${item.name}">
-          <div class="cart-item-info">
-            <div class="cart-item-name">${item.name}</div>
-            <div class="cart-item-price">$${item.price}</div>
-            <div class="cart-item-quantity">
-              <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
-              <span>${item.quantity}</span>
-              <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
-            </div>
-          </div>
-          <button class="remove-favorite" onclick="removeFromCart(${item.id})">&times;</button>
-        </div>
-      `).join('');
-
-      const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-      document.getElementById('cartTotal').textContent = `Итого: $${total}`;
-    }
-
-    function updateQuantity(productId, delta) {
-      const item = cart.find(i => i.id === productId);
-      if (!item) return;
-
-      item.quantity += delta;
-      if (item.quantity <= 0) {
-        cart = cart.filter(i => i.id !== productId);
-      }
-      localStorage.setItem('cart', JSON.stringify(cart));
-      renderCartItems();
-      updateCartBadge();
-    }
-
-    function removeFromCart(productId) {
-      cart = cart.filter(item => item.id !== productId);
-      localStorage.setItem('cart', JSON.stringify(cart));
-      renderCartItems();
-      updateCartBadge();
-    }
-
-    function toggleFavorite(productId) {
-      if (favorites.includes(productId)) {
-        favorites = favorites.filter(id => id !== productId);
-      } else {
-        favorites.push(productId);
-      }
-      localStorage.setItem('favorites', JSON.stringify(favorites));
-      renderProducts();
-    }
-
-    function renderFavorites() {
-      const favoritesContainer = document.getElementById('favoritesList');
-      if (favorites.length === 0) {
-        favoritesContainer.innerHTML = '<p class="no-results">Список избранного пуст</p>';
-        return;
-      }
-
-      const favoriteProducts = products.filter(p => favorites.includes(p.id));
-      favoritesContainer.innerHTML = favoriteProducts.map(product => `
-        <div class="favorite-item">
-          <img src="${product.image}" alt="${product.name}">
-          <div class="favorite-item-info">
-            <div class="favorite-item-name">${product.name}</div>
-            <div class="favorite-item-price">$${product.price}</div>
-          </div>
-          <button class="remove-favorite" onclick="toggleFavorite(${product.id})">&times;</button>
-        </div>
-      `).join('');
-    }
-
-    function openProductDetail(productId) {
-      const product = products.find(p => p.id === productId);
+    function showProductDetails(productId) {
+      const product = state.products.find(p => p.id === productId);
       if (!product) return;
 
-      document.getElementById('productDetail').innerHTML = `
-        <div class="product-detail">
-          <div>
-            <img src="${product.image}" alt="${product.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;200&quot; height=&quot;200&quot; viewBox=&quot;0 0 80 80&quot;><rect width=&quot;80&quot; height=&quot;80&quot; fill=&quot;#667eea&quot;/><text x=&quot;40&quot; y=&quot;45&quot; text-anchor=&quot;middle&quot; fill=&quot;white&quot; font-size=&quot;14&quot;>${product.name.charAt(0)}</text></svg>'">
+      const modalInfo = document.getElementById('modalProductInfo');
+      const modalDetails = document.getElementById('modalProductDetails');
+
+      modalInfo.innerHTML = `
+        <div class="logo-wrapper" style="margin-bottom: 1rem;">
+          <div class="logo-icon" style="background: ${product.bgColor}; color: ${product.iconColor};">
+            <i class="${product.iconClass}"></i>
           </div>
+        </div>
+        <h2>${product.name}</h2>
+        <div class="product-rating">
+          ${generateStars(product.rating)}
+          <span class="rating-text">(${product.reviews} отзывов)</span>
+        </div>
+      `;
+
+      modalDetails.innerHTML = `
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
           <div>
-            <h3>${product.name}</h3>
-            <div class="product-category">${getCategoryName(product.category)}</div>
-            <div class="product-features">
-              ${product.features.map(feature => `<span class="feature-badge">${feature}</span>`).join('')}
-            </div>
+            <h3>Описание</h3>
             <p>${product.description}</p>
-            <div class="product-bottom">
-              <div class="product-price">$${product.price}</div>
-              <div class="availability ${product.availability}">
-                ${getAvailabilityText(product.availability)}
+
+            <h3 style="margin-top: 1.5rem;">Особенности</h3>
+            <ul style="margin-left: 1rem;">
+              ${product.features.map(feature => `<li>${feature}</li>`).join('')}
+            </ul>
+          </div>
+
+          <div>
+            <h3>Информация о товаре</h3>
+            <div style="background: #f8f9fa; padding: 1rem; border-radius: 10px;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                <span>Категория:</span>
+                <strong>${getCategoryName(product.category)}</strong>
               </div>
-              <button class="product-button" onclick="addToCart(${product.id}); closeModal('productModal');"
-                      ${product.availability === 'out-of-stock' ? 'disabled' : ''}>
-                ${product.availability === 'out-of-stock' ? 'Нет в наличии' : 'Добавить в корзину'}
-              </button>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                <span>Рейтинг:</span>
+                <strong>${product.rating}/5</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                <span>Отзывы:</span>
+                <strong>${product.reviews}</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                <span>Наличие:</span>
+                <strong class="${product.availability}">${product.availabilityText}</strong>
+              </div>
+
+              <div style="text-align: center; padding-top: 1rem; border-top: 1px solid #dee2e6;">
+                <div style="font-size: 2rem; font-weight: 700; color: #667eea; margin-bottom: 1rem;">
+                  $${product.price.toFixed(2)}
+                </div>
+                <button class="btn-primary" onclick="addToCart('${product.id}'); closeModal('productModal');" 
+                        ${product.availability === 'out-of-stock' ? 'disabled' : ''}>
+                  ${product.availability === 'out-of-stock' ? 'Нет в наличии' : 'Добавить в корзину'}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -1793,137 +1803,368 @@
       openModal('productModal');
     }
 
+    function addToCart(productId) {
+      const product = state.products.find(p => p.id === productId);
+      if (!product || product.availability === 'out-of-stock') return;
+
+      const existingItem = state.cart.find(item => item.id === productId);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        state.cart.push({ ...product, quantity: 1 });
+      }
+
+      saveCart();
+      updateUI();
+      showNotification('Товар добавлен в корзину!', 'success');
+    }
+
+    function removeFromCart(productId) {
+      state.cart = state.cart.filter(item => item.id !== productId);
+      saveCart();
+      updateUI();
+      renderCart();
+    }
+
+    function updateCartQuantity(productId, quantity) {
+      const item = state.cart.find(item => item.id === productId);
+      if (item) {
+        if (quantity <= 0) {
+          removeFromCart(productId);
+        } else {
+          item.quantity = quantity;
+          saveCart();
+          updateUI();  
+          renderCart();
+        }
+      }
+    }
+
+    function toggleFavorite(productId) {
+      const index = state.favorites.indexOf(productId);
+      if (index > -1) {
+        state.favorites.splice(index, 1);
+      } else {
+        state.favorites.push(productId);
+      }
+
+      saveFavorites();
+      updateUI();
+      renderProducts();
+    }
+
+    function isFavorite(productId) {
+      return state.favorites.includes(productId);
+    }
+
+    function showFavorites() {
+      const favoriteProducts = state.products.filter(p => isFavorite(p.id));
+      const favoritesList = document.getElementById('favoritesList');
+
+      if (favoriteProducts.length === 0) {
+        favoritesList.innerHTML = `
+          <div class="no-results">
+            <i class="fas fa-heart"></i>
+            <h3>Нет избранных товаров</h3>
+            <p>Добавьте товары в избранное, чтобы они появились здесь</p>
+          </div>
+        `;
+      } else {
+        favoritesList.innerHTML = favoriteProducts.map(product => `
+          <div class="cart-item">
+            <div class="logo-wrapper" style="width: 60px; height: 60px; margin: 0;">
+              <div class="logo-icon" style="background: ${product.bgColor}; color: ${product.iconColor}; width: 50px; height: 50px;">
+                <i class="${product.iconClass}" style="font-size: 24px;"></i>
+              </div>
+            </div>
+            <div class="cart-item-info">
+              <div class="cart-item-title">${product.name}</div>
+              <div class="cart-item-price">$${product.price.toFixed(2)}</div>
+            </div>
+            <button onclick="toggleFavorite('${product.id}'); showFavorites();" style="background: #e74c3c; color: white; border: none; padding: 0.5rem; border-radius: 5px; cursor: pointer;">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        `).join('');
+      }
+
+      openModal('favoritesModal');
+    }
+
+    function toggleCart() {
+      const cartSidebar = document.getElementById('cartSidebar');
+      cartSidebar.classList.toggle('open');
+      if (cartSidebar.classList.contains('open')) {
+        renderCart();
+      }
+    }
+
+    function renderCart() {
+      const cartItems = document.getElementById('cartItems');
+      const cartTotal = document.getElementById('cartTotal');
+
+      if (state.cart.length === 0) {
+        cartItems.innerHTML = `
+          <div class="no-results">
+            <i class="fas fa-shopping-cart"></i>
+            <h3>Корзина пуста</h3>
+            <p>Добавьте товары для оформления заказа</p>
+          </div>
+        `;
+        cartTotal.textContent = '$0.00';
+        return;
+      }
+
+      const total = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      cartTotal.textContent = `$${total.toFixed(2)}`;
+
+      cartItems.innerHTML = state.cart.map(item => `
+        <div class="cart-item">
+          <div class="logo-wrapper" style="width: 60px; height: 60px; margin: 0;">
+            <div class="logo-icon" style="background: ${item.bgColor}; color: ${item.iconColor}; width: 50px; height: 50px;">
+              <i class="${item.iconClass}" style="font-size: 24px;"></i>
+            </div>
+          </div>
+          <div class="cart-item-info">
+            <div class="cart-item-title">${item.name}</div>
+            <div class="cart-item-price">$${item.price.toFixed(2)} x ${item.quantity}</div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
+              <button onclick="updateCartQuantity('${item.id}', ${item.quantity - 1})" style="background: #6c757d; color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer;">-</button>
+              <span style="font-weight: 600;">${item.quantity}</span>
+              <button onclick="updateCartQuantity('${item.id}', ${item.quantity + 1})" style="background: #28a745; color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer;">+</button>
+              <button onclick="removeFromCart('${item.id}')" style="background: #dc3545; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 5px; cursor: pointer; margin-left: auto;">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openPaymentModal() {
+      if (state.cart.length === 0) {
+        showNotification('Корзина пуста!', 'error');
+        return;
+      }
+
+      closeModal('cartSidebar');
+      document.getElementById('cartSidebar').classList.remove('open');
+      openModal('paymentModal');
+    }
+
+    function selectPaymentMethod(e) {
+      const method = e.currentTarget;
+      const methodType = method.dataset.method;
+
+      document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+      method.classList.add('selected');
+
+      const paymentDetails = document.getElementById('paymentDetails');
+      const cryptoAddress = document.getElementById('cryptoAddress');
+      const paymentAmount = document.getElementById('paymentAmount');
+
+      const total = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+      const addresses = {
+        bitcoin: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
+        ethereum: '0x742d35Cc6336C67b3B6C8f1b8C1f0F8d5aB6C0B8',
+        usdt: 'TQn9Y2khEsLJW1ChVWFMSMeRDow5KGJPLQ',
+        litecoin: 'LhK2hgT4JMGLo9P6Q7UKMNPRFjgq8rDxJ9'
+      };
+
+      const methodNames = {
+        bitcoin: 'Bitcoin (BTC)',
+        ethereum: 'Ethereum (ETH)', 
+        usdt: 'Tether (USDT)',
+        litecoin: 'Litecoin (LTC)'
+      };
+
+      cryptoAddress.innerHTML = `
+        <div style="background: #f8f9fa; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
+          <h5>Адрес для оплаты ${methodNames[methodType]}:</h5>
+          <div style="background: white; padding: 1rem; border-radius: 5px; border: 2px dashed #dee2e6; font-family: monospace; word-break: break-all; margin: 0.5rem 0;">
+            ${addresses[methodType]}
+          </div>
+          <small style="color: #666;">Скопируйте адрес и отправьте точную сумму</small>
+        </div>
+      `;
+
+      paymentAmount.innerHTML = `
+        <div style="text-align: center; margin: 1rem 0;">
+          <div style="font-size: 1.5rem; font-weight: 700; color: #667eea;">
+            Сумма к оплате: $${total.toFixed(2)}
+          </div>
+          <small style="color: #666;">После оплаты товары будут отправлены на ваш email</small>
+        </div>
+      `;
+
+      paymentDetails.style.display = 'block';
+    }
+
+    function confirmPayment() {
+      const selectedMethod = document.querySelector('.payment-method.selected');
+      if (!selectedMethod) {
+        showNotification('Выберите способ оплаты!', 'error');
+        return;
+      }
+
+      // Симуляция обработки платежа
+      showNotification('Ожидаем подтверждение платежа...', 'info');
+
+      setTimeout(() => {
+        // Очищаем корзину после "успешной" оплаты
+        state.cart = [];
+        saveCart();
+        updateUI();
+
+        closeModal('paymentModal');
+        showNotification('Платеж подтвержден! Товары отправлены на ваш email.', 'success');
+      }, 3000);
+    }
+
+    function loadProfile() {
+      const savedProfile = localStorage.getItem('profile');
+      if (savedProfile) {
+        state.profile = JSON.parse(savedProfile);
+        showProfileInfo();
+      }
+    }
+
+    function saveProfile() {
+      const name = document.getElementById('profileName').value;
+      const email = document.getElementById('profileEmail').value;
+      const phone = document.getElementById('profilePhone').value;
+
+      if (!name || !email || !phone) {
+        showNotification('Заполните все поля!', 'error');
+        return;
+      }
+
+      state.profile = { name, email, phone };
+      localStorage.setItem('profile', JSON.stringify(state.profile));
+      showProfileInfo();
+      showNotification('Профиль сохранен!', 'success');
+    }
+
+    function showProfileInfo() {
+      const profileForm = document.getElementById('profileForm');
+      const profileInfo = document.getElementById('profileInfo');
+      const profileDetails = document.getElementById('profileDetails');
+
+      profileForm.style.display = 'none';
+      profileInfo.style.display = 'block';
+
+      profileDetails.innerHTML = `
+        <div style="background: #f8f9fa; padding: 1rem; border-radius: 10px;">
+          <div style="margin-bottom: 0.5rem;"><strong>Имя:</strong> ${state.profile.name}</div>
+          <div style="margin-bottom: 0.5rem;"><strong>Email:</strong> ${state.profile.email}</div>
+          <div style="margin-bottom: 0.5rem;"><strong>Телефон:</strong> ${state.profile.phone}</div>
+        </div>
+      `;
+    }
+
+    function editProfile() {
+      const profileForm = document.getElementById('profileForm');
+      const profileInfo = document.getElementById('profileInfo');
+
+      document.getElementById('profileName').value = state.profile.name;
+      document.getElementById('profileEmail').value = state.profile.email;
+      document.getElementById('profilePhone').value = state.profile.phone;
+
+      profileForm.style.display = 'block';
+      profileInfo.style.display = 'none';
+    }
+
+    function logoutProfile() {
+      state.profile = null;
+      localStorage.removeItem('profile');
+
+      const profileForm = document.getElementById('profileForm');
+      const profileInfo = document.getElementById('profileInfo');
+
+      profileForm.style.display = 'block';
+      profileInfo.style.display = 'none';
+
+      document.getElementById('profileName').value = '';
+      document.getElementById('profileEmail').value = '';
+      document.getElementById('profilePhone').value = '';
+
+      showNotification('Вы вышли из аккаунта', 'info');
+    }
+
     function openModal(modalId) {
       document.getElementById(modalId).style.display = 'block';
+      document.body.style.overflow = 'hidden';
     }
 
     function closeModal(modalId) {
       document.getElementById(modalId).style.display = 'none';
+      document.body.style.overflow = 'auto';
     }
 
-    function login() {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-
-      if (!email || !password) {
-        showNotification('Заполните все поля!', 'error');
-        return;
-      }
-
-      // Простая имитация авторизации
-      const user = {
-        email: email,
-        name: email.split('@')[0],
-        joinDate: new Date().toLocaleDateString()
-      };
-
-      currentUser = user;
-      localStorage.setItem('currentUser', JSON.stringify(user));
-
-      showAuthenticatedUser();
-      showNotification('Вход выполнен успешно!');
+    function updateUI() {
+      document.getElementById('cartCount').textContent = state.cart.reduce((sum, item) => sum + item.quantity, 0);
+      document.getElementById('favoriteCount').textContent = state.favorites.length;
     }
 
-    function register() {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-
-      if (!email || !password) {
-        showNotification('Заполните все поля!', 'error');
-        return;
-      }
-
-      // Простая имитация регистрации
-      const user = {
-        email: email,
-        name: email.split('@')[0],
-        joinDate: new Date().toLocaleDateString()
-      };
-
-      currentUser = user;
-      localStorage.setItem('currentUser', JSON.stringify(user));
-
-      showAuthenticatedUser();
-      showNotification('Регистрация прошла успешно!');
+    function saveCart() {
+      localStorage.setItem('cart', JSON.stringify(state.cart));
     }
 
-    function logout() {
-      currentUser = null;
-      localStorage.removeItem('currentUser');
-      showAuthForm();
-      showNotification('Вы вышли из аккаунта');
+    function saveFavorites() {
+      localStorage.setItem('favorites', JSON.stringify(state.favorites));
     }
 
-    function checkAuthStatus() {
-      if (currentUser) {
-        showAuthenticatedUser();
-      } else {
-        showAuthForm();
-      }
-    }
-
-    function showAuthForm() {
-      document.getElementById('authForm').style.display = 'block';
-      document.getElementById('userProfile').style.display = 'none';
-    }
-
-    function showAuthenticatedUser() {
-      document.getElementById('authForm').style.display = 'none';
-      document.getElementById('userProfile').style.display = 'block';
-
-      document.getElementById('userName').textContent = currentUser.name;
-      document.getElementById('userEmail').textContent = currentUser.email;
-      document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
-    }
-
-    function showNotification(message, type = 'success') {
+    function showNotification(message, type = 'info') {
       const notification = document.createElement('div');
       notification.style.cssText = `
         position: fixed;
         top: 20px;
         right: 20px;
-        background: ${type === 'error' ? '#ff4757' : '#2ed573'};
+        padding: 1rem 1.5rem;
+        border-radius: 10px;
         color: white;
-        padding: 1rem 2rem;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        z-index: 10000;
-        animation: slideIn 0.3s ease;
+        font-weight: 600;
+        z-index: 9999;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
       `;
 
+      const colors = {
+        success: '#28a745',
+        error: '#dc3545',
+        info: '#17a2b8',
+        warning: '#ffc107'
+      };
+
+      notification.style.background = colors[type] || colors.info;
       notification.textContent = message;
+
       document.body.appendChild(notification);
 
       setTimeout(() => {
-        notification.style.animation = 'slideOut 0.3s ease';
-        setTimeout(() => document.body.removeChild(notification), 300);
+        notification.style.transform = 'translateX(0)';
+      }, 100);
+
+      setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
       }, 3000);
     }
 
-    // Закрытие модальных окон по клику вне их области
-    window.onclick = function(event) {
-      const modals = document.querySelectorAll('.modal');
-      modals.forEach(modal => {
-        if (event.target === modal) {
-          modal.style.display = 'none';
-        }
-      });
-    }
+    // Закрытие боковой панели корзины при клике вне её
+    document.addEventListener('click', function(e) {
+      const cartSidebar = document.getElementById('cartSidebar');
+      const cartBtn = document.getElementById('cartBtn');
 
-    // Добавляем CSS анимации для уведомлений
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes slideIn {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
+      if (cartSidebar.classList.contains('open') && 
+          !cartSidebar.contains(e.target) && 
+          !cartBtn.contains(e.target)) {
+        cartSidebar.classList.remove('open');
       }
-
-      @keyframes slideOut {
-        from { transform: translateX(0); opacity: 1; }
-        to { transform: translateX(100%); opacity: 0; }
-      }
-    `;
-    document.head.appendChild(style);
+    });
   </script>
 </body>
 </html>
